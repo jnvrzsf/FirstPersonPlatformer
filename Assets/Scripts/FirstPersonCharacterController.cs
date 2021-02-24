@@ -22,9 +22,12 @@ public class FirstPersonCharacterController : MonoBehaviour
         isGrounded = controller.isGrounded;
 
         // get move direction
-        float x = isXLocked ? 0 : Input.GetAxis("Horizontal");
-        float z = isZLocked ? 0 : Input.GetAxis("Vertical");
+        float x = isXLocked ? 0 : Input.GetAxisRaw("Horizontal");
+        float z = isZLocked ? 0 : Input.GetAxisRaw("Vertical");
         // inputDirection, h v
+
+        Debug.Log(new Vector3(x, 0, z));
+
         Vector3 move = transform.forward * z + transform.right * x;
         Vector3 moveDirection = move.normalized;
 
