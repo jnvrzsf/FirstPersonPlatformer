@@ -21,10 +21,8 @@ public class FirstPersonCharacterController : MonoBehaviour
         float z = Input.GetAxis("Vertical");
 
         Vector3 move = transform.forward * z + transform.right * x;
-        controller.Move(move.normalized * speed * Time.deltaTime);
-
         velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        controller.Move((move.normalized * speed + velocity) * Time.deltaTime);
 
         isGrounded = controller.isGrounded;
         if (Input.GetButtonDown("Jump") && isGrounded)
