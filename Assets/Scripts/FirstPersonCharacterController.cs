@@ -4,14 +4,16 @@ public class FirstPersonCharacterController : MonoBehaviour
 {
     private CharacterController controller;
 
-    private float moveSpeed = 10f;
-    private float gravity = -45f;
-    private float jumpHeight = 3f;
-    private Vector3 velocity;
-
-    private bool isGrounded = false; // for testing
-    private bool isXLocked = false;
-    private bool isZLocked = false;
+    private Vector2 keyboardInput;
+    private float walkSpeed = 5f;
+    private float jumpHeight = 2f;
+    private float gravity = -20f;
+    private float verticalVelocity;
+    private bool isGrounded; // for testing
+    private bool isXLocked;
+    private bool isZLocked;
+    private Vector3 moveVector;
+    private RaycastHit hit;
 
     void Start()
     {
@@ -20,43 +22,62 @@ public class FirstPersonCharacterController : MonoBehaviour
 
     void Update()
     {
+        GetInput();
+
+        // cast ray down
+        Physics.Raycast(transform.position, Vector3.down, out hit);
+
+        // check if grounded
         isGrounded = controller.isGrounded;
 
-        // get input, move direction
-        float x = isXLocked ? 0 : Input.GetAxisRaw("Horizontal");
-        float z = isZLocked ? 0 : Input.GetAxisRaw("Vertical");
-        Vector3 move = transform.forward * z + transform.right * x;
-        Vector3 moveDirection = move.normalized;
-
-        // apply gravity (before jump boost)
-        velocity.y += gravity * Time.deltaTime;
-
+        // on ground, slope
         if (isGrounded)
         {
             // unlock horizontal movement
-            if (isZLocked) isZLocked = false;
-            if (isXLocked) isXLocked = false;
-            
-            // jump boost (will gradually die down)
+            isXLocked = false;
+            isZLocked = false;
+
+            // calculate move vector
+            Vector3 horizontalDirection = (transform.forward * keyboardInput.x + transform.right * keyboardInput.y).normalized;
+            Vector3 projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, hit.normal).normalized;
+            moveVector = projectedDirection * walkSpeed;
+
+            // add gravity to move vector
+            verticalVelocity = -4; // to make isGrounded work
+            moveVector.y += verticalVelocity; 
+
+            // jump
             if (Input.GetButtonDown("Jump"))
             {
-                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            }
-
-            // reset building gravity (after applying gravity)
-            if (velocity.y < 0f)
-            {
-                velocity.y = -2f;
+                verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                moveVector.y = verticalVelocity;
             }
         }
+        // jumping, falling
         else
         {
             // lock horizontal movement if it halted mid air
-            if (x == 0) isXLocked = true;
-            if (z == 0) isZLocked = true;
+            if (keyboardInput.x == 0) isXLocked = true;
+            if (keyboardInput.y == 0) isZLocked = true;
+
+            // calculate move vector
+            float x = isXLocked ? 0 : keyboardInput.x;
+            float z = isZLocked ? 0 : keyboardInput.y;
+            Vector3 horizontalDirection = (transform.forward * x + transform.right * z).normalized;
+            moveVector = horizontalDirection * walkSpeed;
+
+            // increase downward velocity
+            verticalVelocity += gravity * Time.deltaTime;
+            moveVector.y = verticalVelocity;
         }
 
-        // finally, move the player
-        controller.Move((moveDirection * moveSpeed + velocity) * Time.deltaTime);
+        // move the player
+        controller.Move(moveVector * Time.deltaTime);
+    }
+
+    private void GetInput()
+    {
+        keyboardInput.x = Input.GetAxisRaw("Vertical");
+        keyboardInput.y = Input.GetAxisRaw("Horizontal");
     }
 }
