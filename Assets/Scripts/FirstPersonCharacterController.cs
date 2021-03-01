@@ -4,11 +4,12 @@ public class FirstPersonCharacterController : MonoBehaviour
 {
     private CharacterController controller;
 
-    [SerializeField] private float speed = 10f;
-    [SerializeField] private float gravity = -45f;
-    [SerializeField] public float jumpHeight = 3f;
-    public Vector3 velocity;
-    public bool isGrounded = false;
+    private float moveSpeed = 10f;
+    private float gravity = -45f;
+    private float jumpHeight = 3f;
+    private Vector3 velocity;
+
+    private bool isGrounded = false; // for testing
     private bool isXLocked = false;
     private bool isZLocked = false;
 
@@ -21,13 +22,9 @@ public class FirstPersonCharacterController : MonoBehaviour
     {
         isGrounded = controller.isGrounded;
 
-        // get move direction
+        // get input, move direction
         float x = isXLocked ? 0 : Input.GetAxisRaw("Horizontal");
         float z = isZLocked ? 0 : Input.GetAxisRaw("Vertical");
-        // inputDirection, h v
-
-        Debug.Log(new Vector3(x, 0, z));
-
         Vector3 move = transform.forward * z + transform.right * x;
         Vector3 moveDirection = move.normalized;
 
@@ -59,7 +56,7 @@ public class FirstPersonCharacterController : MonoBehaviour
             if (z == 0) isZLocked = true;
         }
 
-        // move the player (final step)
-        controller.Move((moveDirection * speed + velocity) * Time.deltaTime);
+        // finally, move the player
+        controller.Move((moveDirection * moveSpeed + velocity) * Time.deltaTime);
     }
 }
