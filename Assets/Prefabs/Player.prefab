@@ -63,11 +63,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 148d1988defe7ae49828024343053038, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
-  gravity: 45
-  jumpHeight: 3
-  velocity: {x: 0, y: 0, z: 0}
-  isGrounded: 0
 --- !u!1 &4024841654031707333
 GameObject:
   m_ObjectHideFlags: 0
@@ -126,7 +121,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 80
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -165,5 +160,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 4024841653056849517}
-  mouseSensitivity: 100
-  xRotation: 0
+  mouseSensitivity: 300

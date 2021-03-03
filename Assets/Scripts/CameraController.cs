@@ -6,7 +6,7 @@ public class CameraController : MonoBehaviour
 {
     [SerializeField] private Transform player;
     [SerializeField] private float mouseSensitivity = 100f;
-    public float xRotation = 0f;
+    private float xRotation = 0f;
 
     void Start()
     {
