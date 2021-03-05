@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Carrier : MonoBehaviour
 {
-    [SerializeField] public Transform carryPoint;
+    public Transform carryPoint;
     private Camera cam;
-    private GravityCube pickupObject;
-    private bool isCarrying => pickupObject != null;
+    private Pickupable pickupObject;
 
-    private float currentDistance => Vector3.Distance(carryPoint.transform.position, pickupObject.transform.position);
+    private bool isCarrying => pickupObject != null;
+    private float distance => Vector3.Distance(carryPoint.transform.position, pickupObject.transform.position);
     [SerializeField] private float maxDistance;
 
     private void Start()
@@ -23,7 +23,7 @@ public class Carrier : MonoBehaviour
 
         if (isCarrying)
         {
-            if (keyWasPressed || currentDistance > maxDistance)
+            if (keyWasPressed || distance > maxDistance)
             {
                 Drop();
             }
@@ -52,7 +52,7 @@ public class Carrier : MonoBehaviour
         RaycastHit hitInfo;
         if (Physics.Raycast(ray, out hitInfo, maxDistance))
         {
-            GravityCube p = hitInfo.collider.GetComponent<GravityCube>();
+            Pickupable p = hitInfo.collider.GetComponent<Pickupable>();
             if (p != null)
             {
                 Debug.Log("Picked up object");

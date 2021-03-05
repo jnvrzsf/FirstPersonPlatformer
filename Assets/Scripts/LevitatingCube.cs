@@ -2,32 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevitatingCube : MonoBehaviour, IPickupable
+public class LevitatingCube : Pickupable
 {
-    public void FollowCarrier(float maxDistance)
+    public override void SetToPickedUp(Carrier c)
     {
-        throw new System.NotImplementedException();
+        carrier = c;
+        rb.isKinematic = false;
     }
 
-    public void SetToDropped()
+    public override void SetToDropped()
     {
-        throw new System.NotImplementedException();
-    }
-
-    public void SetToPickedUp(Carrier c)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        carrier = null;
+        rb.isKinematic = true;
     }
 }
