@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Pickupable : MonoBehaviour
 {
+    protected Vector3 originalPosition;
     protected Rigidbody rb;
     protected Carrier carrier;
     protected bool isPickedUp => carrier != null;
@@ -13,6 +14,7 @@ public abstract class Pickupable : MonoBehaviour
 
     private void Start()
     {
+        originalPosition = transform.position;
         rb = GetComponent<Rigidbody>();
     }
 
@@ -25,4 +27,15 @@ public abstract class Pickupable : MonoBehaviour
     }
     public abstract void SetToPickedUp(Carrier c);
     public abstract void SetToDropped();
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "DestructiveField")
+        {
+            Debug.Log("Pickupable destroyed");
+            carrier?.Drop();
+            SetToDropped();
+            rb.position = originalPosition;
+        }
+    }
 }
