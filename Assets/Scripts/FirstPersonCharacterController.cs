@@ -5,7 +5,9 @@ public class FirstPersonCharacterController : MonoBehaviour
     private CharacterController controller;
 
     private Vector2 keyboardInput;
+    private float moveSpeed;
     private float walkSpeed = 5f;
+    private float runSpeed = 10f;
     private float jumpHeight = 2f;
     private float gravity = -20f;
     private float verticalVelocity;
@@ -30,6 +32,9 @@ public class FirstPersonCharacterController : MonoBehaviour
         // check if grounded
         isGrounded = controller.isGrounded;
 
+        // get speed
+        moveSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+
         // on ground, slope
         if (isGrounded)
         {
@@ -40,7 +45,7 @@ public class FirstPersonCharacterController : MonoBehaviour
             // calculate move vector
             Vector3 horizontalDirection = (transform.forward * keyboardInput.x + transform.right * keyboardInput.y).normalized;
             Vector3 projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, hit.normal).normalized;
-            moveVector = projectedDirection * walkSpeed;
+            moveVector = projectedDirection * moveSpeed;
 
             // add gravity to move vector
             verticalVelocity = -4; // to make isGrounded work
@@ -64,7 +69,7 @@ public class FirstPersonCharacterController : MonoBehaviour
             float x = isXLocked ? 0 : keyboardInput.x;
             float z = isZLocked ? 0 : keyboardInput.y;
             Vector3 horizontalDirection = (transform.forward * x + transform.right * z).normalized;
-            moveVector = horizontalDirection * walkSpeed;
+            moveVector = horizontalDirection * moveSpeed;
 
             // increase downward velocity
             verticalVelocity += gravity * Time.deltaTime;
