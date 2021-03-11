@@ -15,7 +15,10 @@ public class FirstPersonCharacterController : MonoBehaviour
     private bool isXLocked;
     private bool isZLocked;
     private Vector3 moveVector;
-    private RaycastHit hit;
+    private RaycastHit raycastHit;
+
+    private bool isOnMovingObject;
+    private Transform hitTransform;
 
     void Start()
     {
@@ -27,12 +30,12 @@ public class FirstPersonCharacterController : MonoBehaviour
         GetInput();
 
         // cast ray down
-        Physics.Raycast(transform.position, Vector3.down, out hit);
+        Physics.Raycast(transform.position, Vector3.down, out raycastHit);
 
         // check if grounded
         isGrounded = controller.isGrounded;
 
-        // get speed
+        // set speed
         moveSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
 
         // on ground, slope
@@ -44,7 +47,7 @@ public class FirstPersonCharacterController : MonoBehaviour
 
             // calculate move vector
             Vector3 horizontalDirection = (transform.forward * keyboardInput.x + transform.right * keyboardInput.y).normalized;
-            Vector3 projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, hit.normal).normalized;
+            Vector3 projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, raycastHit.normal).normalized;
             moveVector = projectedDirection * moveSpeed;
 
             // add gravity to move vector
@@ -84,5 +87,32 @@ public class FirstPersonCharacterController : MonoBehaviour
     {
         keyboardInput.x = Input.GetAxisRaw("Vertical");
         keyboardInput.y = Input.GetAxisRaw("Horizontal");
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        hitTransform = hit.transform;
+        if (hit.gameObject.tag == "MovingObject" && controller.isGrounded)
+        {
+            isOnMovingObject = true;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (isOnMovingObject)
+        {
+            if (transform.parent == null)
+            {
+                transform.SetParent(hitTransform);
+                Debug.Log("ON");
+            }
+        }
+        else if (transform.parent != null)
+        {
+            transform.SetParent(null);
+            Debug.Log("OFF");
+        }
+        isOnMovingObject = false;
     }
 }
