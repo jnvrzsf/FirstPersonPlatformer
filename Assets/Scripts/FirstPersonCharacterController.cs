@@ -20,6 +20,8 @@ public class FirstPersonCharacterController : MonoBehaviour
     private bool isOnMovingObject;
     private Transform hitTransform;
 
+    private float pushPower = 1.0f;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -96,6 +98,13 @@ public class FirstPersonCharacterController : MonoBehaviour
         {
             isOnMovingObject = true;
         }
+
+        // push Rigidbody
+        Rigidbody rb = hit.rigidbody;
+        if (rb == null || rb.isKinematic)
+            return;
+        Vector3 pushDirection = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
+        rb.velocity = pushDirection * pushPower;
     }
 
     private void FixedUpdate()
