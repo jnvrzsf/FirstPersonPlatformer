@@ -20,8 +20,8 @@ public abstract class Pickupable : MonoBehaviour
 
     public void FollowCarrier(float maxDistance)
     {
-        Vector3 direction = (carrier.carryPoint.transform.position - transform.position).normalized;
-        float distance = Vector3.Distance(carrier.carryPoint.transform.position, transform.position);
+        Vector3 direction = (carrier.carryPoint.position - transform.position).normalized;
+        float distance = Vector3.Distance(carrier.carryPoint.position, transform.position);
         float speed = Mathf.SmoothStep(minSpeed, maxSpeed, distance / maxDistance) * Time.fixedDeltaTime;
         rb.velocity = direction * speed;
     }
@@ -30,7 +30,7 @@ public abstract class Pickupable : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "DestructiveField")
+        if (other.gameObject.CompareTag("DestructiveField"))
         {
             Debug.Log("Pickupable destroyed");
             carrier?.Drop();

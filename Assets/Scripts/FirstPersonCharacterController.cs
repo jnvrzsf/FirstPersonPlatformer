@@ -94,7 +94,7 @@ public class FirstPersonCharacterController : MonoBehaviour
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         hitTransform = hit.transform;
-        if (hit.gameObject.tag == "MovingObject" && controller.isGrounded)
+        if (hit.gameObject.CompareTag("MovingObject") && controller.isGrounded)
         {
             isOnMovingObject = true;
         }

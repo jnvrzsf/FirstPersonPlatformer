@@ -9,7 +9,7 @@ public class Carrier : MonoBehaviour
     private Pickupable pickupObject;
 
     private bool isCarrying => pickupObject != null;
-    private float distance => Vector3.Distance(carryPoint.transform.position, pickupObject.transform.position);
+    private float distance => Vector3.Distance(carryPoint.position, pickupObject.transform.position);
     [SerializeField] private float maxDistance;
 
     private void Start()
