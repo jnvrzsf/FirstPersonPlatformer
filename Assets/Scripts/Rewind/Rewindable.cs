@@ -11,11 +11,11 @@ public abstract class Rewindable : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             StartRewinding();
         }
-        if (Input.GetKeyUp(KeyCode.Return))
+        if (Input.GetKeyUp(KeyCode.R))
         {
             StopRewinding();
         }

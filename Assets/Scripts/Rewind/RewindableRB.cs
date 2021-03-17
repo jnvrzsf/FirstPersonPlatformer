@@ -23,6 +23,17 @@ public class RewindableRB : Rewindable
     {
         base.StopRewinding();
         rb.isKinematic = false;
+        ReapplyForces();
+    }
+
+    private void ReapplyForces()
+    {
+        if (records.Count > 0)
+        {
+            RBRecord record = records.First.Value;
+            rb.velocity = record.Velocity;
+            rb.angularVelocity = record.AngularVelocity;
+        }
     }
 
     protected override void Record()
