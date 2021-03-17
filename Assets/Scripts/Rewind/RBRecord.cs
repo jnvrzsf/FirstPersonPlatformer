@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RBRecord
+public class RBRecord : Record
 {
-    public Vector3 Position { get; set; }
-    public Quaternion Rotation { get; set; }
     public Vector3 Velocity { get; set; }
     public Vector3 AngularVelocity { get; set; }
 
-    public RBRecord(Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity)
+    public RBRecord(Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity) : base (position, rotation)
     {
-        Position = position;
-        Rotation = rotation;
         Velocity = velocity;
         AngularVelocity = angularVelocity;
     }

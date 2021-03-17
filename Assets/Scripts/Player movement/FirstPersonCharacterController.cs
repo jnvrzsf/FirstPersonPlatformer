@@ -22,6 +22,8 @@ public class FirstPersonCharacterController : MonoBehaviour
 
     private float pushPower = 1.0f;
 
+    public bool isFrozen;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -29,60 +31,63 @@ public class FirstPersonCharacterController : MonoBehaviour
 
     void Update()
     {
-        GetInput();
-
-        // cast ray down
-        Physics.Raycast(transform.position, Vector3.down, out raycastHit);
-
-        // check if grounded
-        isGrounded = controller.isGrounded;
-
-        // set speed
-        moveSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
-
-        // on ground, slope
-        if (isGrounded)
+        if (!isFrozen)
         {
-            // unlock horizontal movement
-            isXLocked = false;
-            isZLocked = false;
+            GetInput();
 
-            // calculate move vector
-            Vector3 horizontalDirection = (transform.forward * keyboardInput.x + transform.right * keyboardInput.y).normalized;
-            Vector3 projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, raycastHit.normal).normalized;
-            moveVector = projectedDirection * moveSpeed;
+            // cast ray down
+            Physics.Raycast(transform.position, Vector3.down, out raycastHit);
 
-            // add gravity to move vector
-            verticalVelocity = -4; // to make isGrounded work
-            moveVector.y += verticalVelocity; 
+            // check if grounded
+            isGrounded = controller.isGrounded;
 
-            // jump
-            if (Input.GetButtonDown("Jump"))
+            // set speed
+            moveSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+
+            // on ground, slope
+            if (isGrounded)
             {
-                verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                // unlock horizontal movement
+                isXLocked = false;
+                isZLocked = false;
+
+                // calculate move vector
+                Vector3 horizontalDirection = (transform.forward * keyboardInput.x + transform.right * keyboardInput.y).normalized;
+                Vector3 projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, raycastHit.normal).normalized;
+                moveVector = projectedDirection * moveSpeed;
+
+                // add gravity to move vector
+                verticalVelocity = -4; // to make isGrounded work
+                moveVector.y += verticalVelocity;
+
+                // jump
+                if (Input.GetButtonDown("Jump"))
+                {
+                    verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                    moveVector.y = verticalVelocity;
+                }
+            }
+            // jumping, falling
+            else
+            {
+                // lock horizontal movement if it halted mid air
+                if (keyboardInput.x == 0) isXLocked = true;
+                if (keyboardInput.y == 0) isZLocked = true;
+
+                // calculate move vector
+                float x = isXLocked ? 0 : keyboardInput.x;
+                float z = isZLocked ? 0 : keyboardInput.y;
+                Vector3 horizontalDirection = (transform.forward * x + transform.right * z).normalized;
+                moveVector = horizontalDirection * moveSpeed;
+
+                // increase downward velocity
+                verticalVelocity += gravity * Time.deltaTime;
                 moveVector.y = verticalVelocity;
             }
+
+            // move the player
+            controller.Move(moveVector * Time.deltaTime);
         }
-        // jumping, falling
-        else
-        {
-            // lock horizontal movement if it halted mid air
-            if (keyboardInput.x == 0) isXLocked = true;
-            if (keyboardInput.y == 0) isZLocked = true;
-
-            // calculate move vector
-            float x = isXLocked ? 0 : keyboardInput.x;
-            float z = isZLocked ? 0 : keyboardInput.y;
-            Vector3 horizontalDirection = (transform.forward * x + transform.right * z).normalized;
-            moveVector = horizontalDirection * moveSpeed;
-
-            // increase downward velocity
-            verticalVelocity += gravity * Time.deltaTime;
-            moveVector.y = verticalVelocity;
-        }
-
-        // move the player
-        controller.Move(moveVector * Time.deltaTime);
     }
 
     private void GetInput()
@@ -124,4 +129,7 @@ public class FirstPersonCharacterController : MonoBehaviour
         }
         isOnMovingObject = false;
     }
+
+    public void Freeze() => isFrozen = true;
+    public void Unfreeze() => isFrozen = false;
 }

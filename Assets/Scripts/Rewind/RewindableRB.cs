@@ -38,11 +38,11 @@ public class RewindableRB : Rewindable
 
     protected override void Record()
     {
+        records.AddFirst(new RBRecord(transform.position, transform.rotation, rb.velocity, rb.angularVelocity));
         if (records.Count > Mathf.Round(recordTimeInSeconds / Time.fixedDeltaTime))
         {
             records.RemoveLast();
         }
-        records.AddFirst(new RBRecord(transform.position, transform.rotation, rb.velocity, rb.angularVelocity));
     }
 
     protected override void Rewind()
