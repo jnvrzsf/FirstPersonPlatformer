@@ -5,6 +5,11 @@ public class FirstPersonCharacterController : MonoBehaviour
     private CharacterController controller;
 
     private Vector2 keyboardInput;
+    private bool isXLocked;
+    private bool isZLocked;
+    private bool isSpeeding;
+    private bool isSpeedingLocked;
+
     private float moveSpeed;
     private float walkSpeed = 5f;
     private float runSpeed = 10f;
@@ -12,8 +17,7 @@ public class FirstPersonCharacterController : MonoBehaviour
     private float gravity = -20f;
     private float verticalVelocity;
     private bool isGrounded; // for testing
-    private bool isXLocked;
-    private bool isZLocked;
+
     private Vector3 moveVector;
     private RaycastHit raycastHit;
 
@@ -41,19 +45,18 @@ public class FirstPersonCharacterController : MonoBehaviour
             // check if grounded
             isGrounded = controller.isGrounded;
 
-            // set speed
-            moveSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
-
             // on ground, slope
             if (isGrounded)
             {
-                // unlock horizontal movement
+                // unlock horizontal movement and speed
                 isXLocked = false;
                 isZLocked = false;
+                isSpeedingLocked = false;
 
                 // calculate move vector
                 Vector3 horizontalDirection = (transform.forward * keyboardInput.x + transform.right * keyboardInput.y).normalized;
                 Vector3 projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, raycastHit.normal).normalized;
+                moveSpeed = isSpeeding ? runSpeed : walkSpeed;
                 moveVector = projectedDirection * moveSpeed;
 
                 // add gravity to move vector
@@ -73,11 +76,14 @@ public class FirstPersonCharacterController : MonoBehaviour
                 // lock horizontal movement if it halted mid air
                 if (keyboardInput.x == 0) isXLocked = true;
                 if (keyboardInput.y == 0) isZLocked = true;
+                // lock speed
+                if (isSpeeding) isSpeedingLocked = true;
 
                 // calculate move vector
                 float x = isXLocked ? 0 : keyboardInput.x;
                 float z = isZLocked ? 0 : keyboardInput.y;
                 Vector3 horizontalDirection = (transform.forward * x + transform.right * z).normalized;
+                moveSpeed = isSpeedingLocked ? runSpeed : walkSpeed;
                 moveVector = horizontalDirection * moveSpeed;
 
                 // increase downward velocity
@@ -94,6 +100,7 @@ public class FirstPersonCharacterController : MonoBehaviour
     {
         keyboardInput.x = Input.GetAxisRaw("Vertical");
         keyboardInput.y = Input.GetAxisRaw("Horizontal");
+        isSpeeding = Input.GetKey(KeyCode.LeftShift);
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
