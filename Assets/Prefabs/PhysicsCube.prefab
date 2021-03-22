@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7914606444912997126}
   - component: {fileID: 5087474799160498063}
   m_Layer: 0
-  m_Name: GravityCube
+  m_Name: PhysicsCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5d6b1e5411a4476408745e5a0b4c18c4, type: 2}
+  - {fileID: 2100000, guid: 6f3746d80d38e8247b9d81161691d63b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -108,9 +108,9 @@ Rigidbody:
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 1
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &5087474799160498063
 MonoBehaviour:
   m_ObjectHideFlags: 0
