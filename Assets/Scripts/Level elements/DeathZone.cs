@@ -12,7 +12,7 @@ public class DeathZone : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             rewindScript = other.GetComponent<RewindOnDeath>();
-            rewindScript.SetDead();
+            rewindScript?.SetDead();
         }
     }
 }
