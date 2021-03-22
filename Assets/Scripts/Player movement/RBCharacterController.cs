@@ -18,7 +18,7 @@ public class RBCharacterController : MonoBehaviour
     private float groundDistance = 0.2f; // player width: 1, max slope angle: 45 degrees
     private float jumpDistance = 0.8f;
     private bool isGrounded => hitInfo.distance < col.bounds.extents.y + groundDistance;
-    private bool isAllowedToJump => hitInfo.distance < col.bounds.extents.y + jumpDistance;
+    private bool canJump => hitInfo.distance < col.bounds.extents.y + jumpDistance;
     private bool isOnSlope => isGrounded && hitInfo.normal != Vector3.up ? true : false;
 
     private Vector3 horizontalDirection;
@@ -36,7 +36,7 @@ public class RBCharacterController : MonoBehaviour
 
     private void Update()
     {
-        if (playerInput.isJumpPressed && isAllowedToJump)
+        if (playerInput.isJumpPressed && canJump)
         {
             jump = true;
         }
