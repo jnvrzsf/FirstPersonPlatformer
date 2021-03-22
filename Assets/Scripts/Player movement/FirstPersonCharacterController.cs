@@ -3,11 +3,10 @@
 public class FirstPersonCharacterController : MonoBehaviour
 {
     private CharacterController controller;
+    private PlayerInput playerInput;
 
-    private Vector2 keyboardInput;
     private bool isXLocked;
     private bool isZLocked;
-    private bool isSpeeding;
     private bool isSpeedingLocked;
 
     private float moveSpeed;
@@ -31,14 +30,13 @@ public class FirstPersonCharacterController : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        playerInput = GetComponent<PlayerInput>();
     }
 
     void Update()
     {
         if (!isFrozen)
         {
-            GetInput();
-
             // cast ray down
             Physics.Raycast(transform.position, Vector3.down, out raycastHit);
 
@@ -54,9 +52,9 @@ public class FirstPersonCharacterController : MonoBehaviour
                 isSpeedingLocked = false;
 
                 // calculate move vector
-                Vector3 horizontalDirection = (transform.forward * keyboardInput.x + transform.right * keyboardInput.y).normalized;
+                Vector3 horizontalDirection = (transform.forward * playerInput.Vertical + transform.right * playerInput.Horizontal).normalized;
                 Vector3 projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, raycastHit.normal).normalized;
-                moveSpeed = isSpeeding ? runSpeed : walkSpeed;
+                moveSpeed = playerInput.isRunPressed ? runSpeed : walkSpeed;
                 moveVector = projectedDirection * moveSpeed;
 
                 // add gravity to move vector
@@ -64,7 +62,7 @@ public class FirstPersonCharacterController : MonoBehaviour
                 moveVector.y += verticalVelocity;
 
                 // jump
-                if (Input.GetButtonDown("Jump"))
+                if (playerInput.isJumpPressed)
                 {
                     verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
                     moveVector.y = verticalVelocity;
@@ -74,14 +72,14 @@ public class FirstPersonCharacterController : MonoBehaviour
             else
             {
                 // lock horizontal movement if it halted mid air
-                if (keyboardInput.x == 0) isXLocked = true;
-                if (keyboardInput.y == 0) isZLocked = true;
+                if (playerInput.Vertical == 0) isXLocked = true;
+                if (playerInput.Horizontal == 0) isZLocked = true;
                 // lock speed
-                if (isSpeeding) isSpeedingLocked = true;
+                if (playerInput.isRunPressed) isSpeedingLocked = true;
 
                 // calculate move vector
-                float x = isXLocked ? 0 : keyboardInput.x;
-                float z = isZLocked ? 0 : keyboardInput.y;
+                float x = isXLocked ? 0 : playerInput.Vertical;
+                float z = isZLocked ? 0 : playerInput.Horizontal;
                 Vector3 horizontalDirection = (transform.forward * x + transform.right * z).normalized;
                 moveSpeed = isSpeedingLocked ? runSpeed : walkSpeed;
                 moveVector = horizontalDirection * moveSpeed;
@@ -94,13 +92,6 @@ public class FirstPersonCharacterController : MonoBehaviour
             // move the player
             controller.Move(moveVector * Time.deltaTime);
         }
-    }
-
-    private void GetInput()
-    {
-        keyboardInput.x = Input.GetAxisRaw("Vertical");
-        keyboardInput.y = Input.GetAxisRaw("Horizontal");
-        isSpeeding = Input.GetKey(KeyCode.LeftShift);
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)

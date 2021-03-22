@@ -6,75 +6,87 @@ public class RBCharacterController : MonoBehaviour
 {
     private Rigidbody rb;
     private Collider col;
-    private Vector2 keyboardInput;
+    private PlayerInput playerInput;
+
     private float walkSpeed = 5f;
     private Vector3 moveVector;
     private float jumpForce = 7f;
 
     [Header("Ground Detection")]
     [SerializeField] private LayerMask groundMask;
-    [SerializeField] private float groundDistance = 0.4f;
-    [SerializeField] private float jumpDistance = 0.8f;
+    private RaycastHit hitInfo;
+    private float groundDistance = 0.2f; // player width: 1, max slope angle: 45 degrees
+    private float jumpDistance = 0.8f;
     private bool isGrounded => hitInfo.distance < col.bounds.extents.y + groundDistance;
-    private bool canJump => hitInfo.distance < col.bounds.extents.y + jumpDistance;
-    private bool isOnSlope => hitInfo.normal != Vector3.up ? true : false;
-    RaycastHit hitInfo;
+    private bool isAllowedToJump => hitInfo.distance < col.bounds.extents.y + jumpDistance;
+    private bool isOnSlope => isGrounded && hitInfo.normal != Vector3.up ? true : false;
 
     private Vector3 horizontalDirection;
     private Vector3 projectedDirection;
+
+    public float targetSpeed = 5f;
+    private bool jump;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
+        playerInput = GetComponent<PlayerInput>();
     }
 
-    void Update()
+    private void Update()
     {
-        GetInput();
+        if (playerInput.isJumpPressed && isAllowedToJump)
+        {
+            jump = true;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        rb.useGravity = true;
+
         CastRayDown();
 
-        if (Input.GetKeyDown(KeyCode.Space) && canJump)
+        horizontalDirection = (transform.forward * playerInput.Vertical + transform.right * playerInput.Horizontal).normalized;
+        projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, hitInfo.normal).normalized;
+
+        float x = 0;
+        float y = 0;
+        float z = 0;
+
+        if (isOnSlope)
         {
-            rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+            if (playerInput.Horizontal == 0 && playerInput.Vertical == 0 && isGrounded)
+            {
+                rb.useGravity = false;
+            }
+            else
+            {
+                x = projectedDirection.x * walkSpeed;
+                y = projectedDirection.y * walkSpeed;
+                z = projectedDirection.z * walkSpeed;
+            }
+        }
+        else
+        {
+            x = projectedDirection.x * walkSpeed;
+            y = rb.velocity.y;
+            z = projectedDirection.z * walkSpeed;
         }
 
-        horizontalDirection = (transform.forward * keyboardInput.y + transform.right * keyboardInput.x).normalized;
-        projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, hitInfo.normal).normalized;
-        float x = projectedDirection.x * walkSpeed;
-        float y = rb.velocity.y;
-        float z = projectedDirection.z * walkSpeed;
-        moveVector = new Vector3(x, y, z);
-    }
+        if (jump)
+        {
+            y = jumpForce;
+            jump = false;
+        }
 
-    private void GetInput()
-    {
-        keyboardInput.x = Input.GetAxisRaw("Horizontal");
-        keyboardInput.y = Input.GetAxisRaw("Vertical");
+        moveVector = new Vector3(x, y, z);
+        rb.velocity = moveVector;
     }
 
     private void CastRayDown()
     {
         Physics.Raycast(transform.position, Vector3.down, out hitInfo);
-    }
-
-    private void FixedUpdate()
-    {
-        if (keyboardInput.x == 0 && keyboardInput.y == 0 && isGrounded)
-        {
-            rb.velocity =  new Vector3(0, rb.velocity.y, 0);
-        }
-        else
-        {
-            if (isOnSlope)
-            {
-                // y = 0 if halted
-                rb.velocity = projectedDirection * walkSpeed;
-            }
-            else
-            {
-                rb.velocity = moveVector;
-            }
-        }
     }
 }
