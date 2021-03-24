@@ -4,30 +4,7 @@ using UnityEngine;
 
 public class PhysicsCube : Pickupable
 {
-    private bool isGrounded;
-
-    private void FixedUpdate()
-    {
-        //if (!isPickedUp)
-        //{
-        //    // check if grounded
-        //    RaycastHit hitInfo;
-        //    Physics.BoxCast(transform.position, new Vector3(0.5f, 0.5f, 0.5f), Vector3.down, out hitInfo);
-
-
-        //    if (!isGrounded)
-        //    {
-        //        ApplyGravity();
-        //    }
-        //}
-    }
-
-    private void ApplyGravity()
-    {
-        rb.MovePosition(transform.position + Vector3.down * 5 * Time.fixedDeltaTime);
-    }
-
-    public override void SetToPickedUp(Carrier c)
+    public override void SetToPickedUp(Carrying c)
     {
         carrier = c;
         rb.useGravity = false;

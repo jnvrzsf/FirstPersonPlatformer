@@ -19,6 +19,14 @@ public class RewindOnDeath : MonoBehaviour
         cameraRecords = new LinkedList<Quaternion>();
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("DeathZone"))
+        {
+            isDead = true;
+        }
+    }
+
     private void Update()
     {
         if (isDead)
@@ -91,7 +99,4 @@ public class RewindOnDeath : MonoBehaviour
         playerController.Unfreeze();
         cameraController.Unfreeze();
     }
-
-    public void SetDead() => isDead = true;
-    public void SetAlive() => isDead = false;
 }

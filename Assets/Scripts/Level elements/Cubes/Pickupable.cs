@@ -4,9 +4,9 @@ using UnityEngine;
 
 public abstract class Pickupable : MonoBehaviour
 {
-    protected Vector3 originalPosition;
     protected Rigidbody rb;
-    protected Carrier carrier;
+    protected Carrying carrier;
+    public bool canBePickedUp { get; set; } = true; // ?
     protected bool isPickedUp => carrier != null;
     protected float minSpeed = 0;
     protected float maxSpeed = 8000;
@@ -14,7 +14,6 @@ public abstract class Pickupable : MonoBehaviour
 
     private void Start()
     {
-        originalPosition = transform.position;
         rb = GetComponent<Rigidbody>();
     }
 
@@ -25,17 +24,10 @@ public abstract class Pickupable : MonoBehaviour
         float speed = Mathf.SmoothStep(minSpeed, maxSpeed, distance / maxDistance) * Time.fixedDeltaTime;
         rb.velocity = direction * speed;
     }
-    public abstract void SetToPickedUp(Carrier c);
+    public abstract void SetToPickedUp(Carrying c);
     public abstract void SetToDropped();
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("DestructiveField"))
-        {
-            Debug.Log("Pickupable destroyed");
-            carrier?.Drop();
-            SetToDropped();
-            rb.position = originalPosition;
-        }
+    public virtual void SetToUntouchable() {
+        carrier?.Drop();
+        canBePickedUp = false;
     }
 }
