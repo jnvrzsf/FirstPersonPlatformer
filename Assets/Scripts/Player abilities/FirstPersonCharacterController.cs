@@ -12,7 +12,7 @@ public class FirstPersonCharacterController : MonoBehaviour
     private float moveSpeed;
     private float walkSpeed = 5f;
     private float runSpeed = 10f;
-    private float jumpHeight = 2f;
+    private float jumpHeight = 1.6f;
     private float jumpDistance = 0.8f;
     private bool canJump => hitInfo.distance < controller.bounds.extents.y + jumpDistance;
     private float gravity = -20f;
@@ -28,6 +28,9 @@ public class FirstPersonCharacterController : MonoBehaviour
 
     public bool isFrozen;
 
+    public bool isGrounded;
+    public bool canJ;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -36,6 +39,8 @@ public class FirstPersonCharacterController : MonoBehaviour
 
     void Update()
     {
+        isGrounded = controller.isGrounded;
+        canJ = canJump;
         if (!isFrozen)
         {
             // cast ray down
@@ -81,7 +86,7 @@ public class FirstPersonCharacterController : MonoBehaviour
             }
 
             // jump
-            if (playerInput.isJumpPressed && canJump)
+            if (playerInput.isJumpPressed && (canJump || isGrounded)) // or isgrounded
             {
                 verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
                 moveVector.y = verticalVelocity;

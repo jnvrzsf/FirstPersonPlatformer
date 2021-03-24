@@ -44,6 +44,8 @@ GameObject:
   - component: {fileID: 4024841653056849522}
   - component: {fileID: 109959055}
   - component: {fileID: 4141831281487872679}
+  - component: {fileID: 1769710784}
+  - component: {fileID: 1769710785}
   m_Layer: 0
   m_Name: CCPlayer
   m_TagString: Player
@@ -122,7 +124,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   carryPoint: {fileID: 1358982009}
-  maxDistance: 5
 --- !u!114 &4141831281487872679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,6 +138,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 4024841653056849522}
   cameraController: {fileID: 4024841654031707337}
+--- !u!114 &1769710784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4024841653056849519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 577223879c9d7d34d9f9b1b0b0e91dc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitSomething: 0
+--- !u!114 &1769710785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4024841653056849519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57647760496aad24abc1af9ff680ffd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4024841654031707333
 GameObject:
   m_ObjectHideFlags: 0
