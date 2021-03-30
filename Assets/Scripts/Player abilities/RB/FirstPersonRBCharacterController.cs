@@ -26,8 +26,6 @@ public class FirstPersonRBCharacterController : MonoBehaviour
     private Vector3 horizontalDirection;
     private Vector3 projectedDirection;
 
-    public float targetSpeed = 5f;
-
     void Start()
     {
         rb = GetComponent<Rigidbody>();

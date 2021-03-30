@@ -28,9 +28,6 @@ public class FirstPersonCharacterController : MonoBehaviour
 
     public bool isFrozen;
 
-    public bool isGrounded;
-    public bool canJ;
-
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -39,8 +36,6 @@ public class FirstPersonCharacterController : MonoBehaviour
 
     void Update()
     {
-        isGrounded = controller.isGrounded;
-        canJ = canJump;
         if (!isFrozen)
         {
             // cast ray down
@@ -86,7 +81,7 @@ public class FirstPersonCharacterController : MonoBehaviour
             }
 
             // jump
-            if (playerInput.IsJumpPressed && (canJump || isGrounded)) // or isgrounded
+            if (playerInput.IsJumpPressed && (canJump || controller.isGrounded))
             {
                 verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
                 moveVector.y = verticalVelocity;
