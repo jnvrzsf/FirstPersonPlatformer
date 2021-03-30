@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Look : MonoBehaviour
+public class ControllOrientation : MonoBehaviour
 {
-    [SerializeField] private Transform cam;
-    [SerializeField] private Transform orientation;
+    [SerializeField] private Transform playerSight;
+    [SerializeField] private Transform playerOrientation;
     [SerializeField] private PlayerInput playerInput;
     private float xRotation;
     private float yRotation;
@@ -24,7 +24,7 @@ public class Look : MonoBehaviour
 
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        cam.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        orientation.rotation = Quaternion.Euler(0, yRotation, 0); 
+        playerSight.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+        playerOrientation.rotation = Quaternion.Euler(0, yRotation, 0); 
     }
 }
