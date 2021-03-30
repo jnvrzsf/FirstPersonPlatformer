@@ -6,7 +6,7 @@ public class RayFromCamera : MonoBehaviour
 {
     private Camera cam;
     private Vector3 pos;
-    public bool hitSomething;
+    [HideInInspector] public bool hitSomething;
     public RaycastHit hitInfo;
 
     void Start()

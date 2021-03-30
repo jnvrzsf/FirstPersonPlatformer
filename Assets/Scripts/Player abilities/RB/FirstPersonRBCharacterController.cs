@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RBCharacterController : MonoBehaviour
+public class FirstPersonRBCharacterController : MonoBehaviour
 {
     private Rigidbody rb;
     private Collider col;
     private PlayerInput playerInput;
+    [SerializeField] private Transform orientation;
+    private bool jump;
 
     private float walkSpeed = 5f;
     private Vector3 moveVector;
-    private float jumpForce = 7f;
+    private float jumpForce = 8f;
 
     [Header("Ground Detection")]
     [SerializeField] private LayerMask groundMask;
@@ -25,7 +27,6 @@ public class RBCharacterController : MonoBehaviour
     private Vector3 projectedDirection;
 
     public float targetSpeed = 5f;
-    private bool jump;
 
     void Start()
     {
@@ -36,7 +37,7 @@ public class RBCharacterController : MonoBehaviour
 
     private void Update()
     {
-        if (playerInput.isJumpPressed && canJump)
+        if (playerInput.IsJumpPressed && canJump)
         {
             jump = true;
         }
@@ -48,7 +49,7 @@ public class RBCharacterController : MonoBehaviour
 
         CastRayDown();
 
-        horizontalDirection = (transform.forward * playerInput.Vertical + transform.right * playerInput.Horizontal).normalized;
+        horizontalDirection = (orientation.transform.forward * playerInput.Vertical + orientation.transform.right * playerInput.Horizontal).normalized;
         projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, hitInfo.normal).normalized;
 
         float x = 0;

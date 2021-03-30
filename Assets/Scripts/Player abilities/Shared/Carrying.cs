@@ -8,6 +8,7 @@ public class Carrying : MonoBehaviour
     private PlayerInput playerInput;
     private RayFromCamera ray;
     private Pickupable pickupObject;
+    private AudioSource aS;
     private bool isCarrying => pickupObject != null;
     private float distance => Vector3.Distance(carryPoint.position, pickupObject.transform.position);
     private float maxDistance = 5f;
@@ -16,20 +17,21 @@ public class Carrying : MonoBehaviour
     {
         playerInput = GetComponent<PlayerInput>();
         ray = GetComponent<RayFromCamera>();
+        aS = GetComponent<AudioSource>();
     }
 
     private void Update()
     {
         if (isCarrying)
         {
-            if (playerInput.isActionPressed || distance > maxDistance)
+            if (playerInput.IsActionPressed || distance > maxDistance)
             {
                 Drop();
             }
         }
         else
         {
-            if (playerInput.isActionPressed)
+            if (playerInput.IsActionPressed)
             {
                 PickUp();
             }
@@ -54,12 +56,14 @@ public class Carrying : MonoBehaviour
                 if (p.canBePickedUp)
                 {
                     Debug.Log("Picked up object");
+                    // TODO: play sound
                     pickupObject = p;
                     pickupObject.SetToPickedUp(this);
                 }
                 else
                 {
                     Debug.Log("Object can't be picked up");
+                    // TODO: play sound
                 }
             }
         }

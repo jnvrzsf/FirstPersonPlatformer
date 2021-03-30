@@ -14,6 +14,9 @@ GameObject:
   - component: {fileID: 677756895070793914}
   - component: {fileID: 4999338072433914336}
   - component: {fileID: 2238476793404340243}
+  - component: {fileID: 2015276741932691309}
+  - component: {fileID: 7430205656413736893}
+  - component: {fileID: 5703284628311787179}
   m_Layer: 0
   m_Name: RBPlayer
   m_TagString: Player
@@ -108,6 +111,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4b51ae8058d16d4f8b34ac1acb10e58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2015276741932691309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4999338072433914366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef08a6b7dba56fc409adf3a9318b5faf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carryPoint: {fileID: 6517163538943168117}
+--- !u!114 &7430205656413736893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4999338072433914366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 577223879c9d7d34d9f9b1b0b0e91dc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitSomething: 0
+--- !u!114 &5703284628311787179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4999338072433914366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57647760496aad24abc1af9ff680ffd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6517163538943168116
 GameObject:
   m_ObjectHideFlags: 0
@@ -132,7 +173,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6517163538943168116}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3}
+  m_LocalPosition: {x: 0, y: 0, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6517163539776885480}

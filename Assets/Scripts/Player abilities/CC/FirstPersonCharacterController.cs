@@ -57,7 +57,7 @@ public class FirstPersonCharacterController : MonoBehaviour
                 // calculate move vector
                 Vector3 horizontalDirection = (transform.forward * playerInput.Vertical + transform.right * playerInput.Horizontal).normalized;
                 Vector3 projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, hitInfo.normal).normalized;
-                moveSpeed = playerInput.isRunPressed ? runSpeed : walkSpeed;
+                moveSpeed = playerInput.IsRunPressed ? runSpeed : walkSpeed;
                 moveVector = projectedDirection * moveSpeed;
 
                 // add gravity to move vector
@@ -71,7 +71,7 @@ public class FirstPersonCharacterController : MonoBehaviour
                 if (playerInput.Vertical == 0) isXLocked = true;
                 if (playerInput.Horizontal == 0) isZLocked = true;
                 // lock speed
-                if (playerInput.isRunPressed) isRunningLocked = true;
+                if (playerInput.IsRunPressed) isRunningLocked = true;
 
                 // calculate move vector
                 float x = isXLocked ? 0 : playerInput.Vertical;
@@ -86,7 +86,7 @@ public class FirstPersonCharacterController : MonoBehaviour
             }
 
             // jump
-            if (playerInput.isJumpPressed && (canJump || isGrounded)) // or isgrounded
+            if (playerInput.IsJumpPressed && (canJump || isGrounded)) // or isgrounded
             {
                 verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
                 moveVector.y = verticalVelocity;

@@ -90,13 +90,13 @@ public class RewindOnDeath : MonoBehaviour
 
     private void FreezePlayer()
     {
-        playerController.Freeze();
-        cameraController.Freeze();
+        //playerController.Freeze();
+        //cameraController.Freeze();
     }
 
     private void UnfreezePlayer()
     {
-        playerController.Unfreeze();
-        cameraController.Unfreeze();
+        //playerController.Unfreeze();
+        //cameraController.Unfreeze();
     }
 }

@@ -6,7 +6,7 @@ public class ButtonPress : MonoBehaviour
 {
     private RayFromCamera ray;
     private PlayerInput playerInput;
-    private const float maxDistance = 1;
+    private const float maxDistance = 2;
 
     void Start()
     {
@@ -16,7 +16,7 @@ public class ButtonPress : MonoBehaviour
 
     void Update()
     {
-        if (playerInput.isActionPressed)
+        if (playerInput.IsActionPressed)
         {
             if (ray.hitSomething && ray.hitInfo.distance < maxDistance && ray.hitInfo.transform.CompareTag("Button"))
             {
