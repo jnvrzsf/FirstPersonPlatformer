@@ -12,6 +12,11 @@ public class Look : MonoBehaviour
     private float mouseSensitivityX = 250f;
     private float mouseSensitivityY = 400f;
 
+    void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     void Update()
     {
         xRotation -= playerInput.MouseY * mouseSensitivityY * Time.deltaTime;
