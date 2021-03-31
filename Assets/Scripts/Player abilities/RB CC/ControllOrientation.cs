@@ -14,7 +14,6 @@ public class ControllOrientation : MonoBehaviour
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         yRotation = transform.rotation.eulerAngles.y;
     }
 
