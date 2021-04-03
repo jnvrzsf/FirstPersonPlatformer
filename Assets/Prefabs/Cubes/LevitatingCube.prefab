@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 8436397187770683715}
   - component: {fileID: 4080301621087086855}
   - component: {fileID: 4080301621087086854}
-  - component: {fileID: 84979137492430551}
   m_Layer: 0
   m_Name: LevitatingCube
   m_TagString: Untagged
@@ -124,17 +123,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 113ef950c54743a42bac2ab3dd4b34e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &84979137492430551
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5251146694478668658}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf2546ba46ddf714f93bb3aa82aa2a8a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dissolveMat: {fileID: 2100000, guid: 6bf89ce6ee784934490f9a1eafeb9d86, type: 2}
   spawner: {fileID: 0}
+  dissolveMat: {fileID: 2100000, guid: a13be8a94cb56d14a8b1544f20c9629d, type: 2}

@@ -1,44 +1,63 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnButton : MonoBehaviour
 {
     [SerializeField] private GameObject cubePrefab;
     [SerializeField] private Transform SpawnPoint;
-    private GameObject cube;
-    private Dissolving dissolveScript;
-    private bool canSpawn = true;
-    private const float secondsBetweenSpawns = 2f;
+    private Pickupable cube;
+    private bool canBePressed = true;
+    private Vector3 originalPosition;
+    private Coroutine coroutine;
 
-    void Start()
+    private const float secondsBetweenPresses = 2f;
+    private const float buttonDip = 0.04f;
+
+    private void Start()
     {
+        originalPosition = transform.position;
         SpawnNewCube();
     }
 
-    public void Press()
+    public void TryPress()
     {
-        if (canSpawn)
+        if (canBePressed)
         {
-            // TODO: play success sound, animate press down, stay pressed
-            dissolveScript.Dissolve();
-            SpawnNewCube();
+            Press();
+            AudioManager.instance.Play(AudioType.ButtonPressSuccess);
         }
-        // TODO: play fail sound
+        else
+        {
+            AudioManager.instance.Play(AudioType.ButtonPressFail);
+        }
+    }
+
+    private void Press()
+    {
+        cube?.Destroy();
+        transform.position = new Vector3(transform.position.x, transform.position.y - buttonDip, transform.position.z);
+        coroutine = StartCoroutine(RestoreButton(secondsBetweenPresses));
+        SpawnNewCube();
     }
 
     public void SpawnNewCube()
     {
-        cube = Instantiate(cubePrefab, SpawnPoint.position, Quaternion.identity);
-        dissolveScript = cube.GetComponent<Dissolving>();
-        dissolveScript.OnDestroyed += SpawnNewCube;
-        StartCoroutine(ToggleCanSpawn(secondsBetweenSpawns));
+        cube = Instantiate(cubePrefab, SpawnPoint.position, Quaternion.identity).GetComponent<Pickupable>();
+        cube.spawner = this;
+        AudioManager.instance.Play(AudioType.CubeSpawn, SpawnPoint.position);
     }
 
-    private IEnumerator ToggleCanSpawn(float delay)
+    private IEnumerator RestoreButton(float seconds)
     {
-        canSpawn = false;
-        yield return new WaitForSeconds(delay);
-        canSpawn = true;
+        canBePressed = false;
+        Vector3 currentPosition = transform.position;
+        float t = 0f;
+        while (t < 1)
+        {
+            t += Time.deltaTime / seconds;
+            transform.position = Vector3.Lerp(currentPosition, originalPosition, t);
+            yield return null;
+        }
+        canBePressed = true;
     }
 }

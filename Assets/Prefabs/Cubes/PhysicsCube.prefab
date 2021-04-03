@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 5087474799160498056}
   - component: {fileID: 7914606444912997126}
   - component: {fileID: 5087474799160498063}
-  - component: {fileID: 6608932359066030667}
   m_Layer: 0
   m_Name: PhysicsCube
   m_TagString: Untagged
@@ -124,17 +123,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbae2d30adbc31044995f34f477c1dae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6608932359066030667
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5087474799160498062}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf2546ba46ddf714f93bb3aa82aa2a8a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dissolveMat: {fileID: 2100000, guid: 6bf89ce6ee784934490f9a1eafeb9d86, type: 2}
   spawner: {fileID: 0}
+  dissolveMat: {fileID: 2100000, guid: 7fc3da90a2329c3468faeddd6c1d7be5, type: 2}

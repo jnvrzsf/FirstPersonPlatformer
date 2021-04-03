@@ -20,7 +20,7 @@ public class ButtonPress : MonoBehaviour
         {
             if (ray.hitSomething && ray.hitInfo.distance < maxDistance && ray.hitInfo.transform.CompareTag("Button"))
             {
-                ray.hitInfo.transform.GetComponent<SpawnButton>().Press();
+                ray.hitInfo.transform.GetComponent<SpawnButton>().TryPress();
             }
         }
     }
