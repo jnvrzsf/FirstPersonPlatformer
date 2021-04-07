@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CursorController : MonoBehaviour
 {
-    [SerializeField] GameObject cursor;
+    public GameObject crosshair;
+    private bool isCarrying;
 
     private void Awake()
     {
@@ -14,12 +15,29 @@ public class CursorController : MonoBehaviour
     public void Lock()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        cursor.SetActive(true);
+        Cursor.visible = false;
+        if (!isCarrying) ShowCrosshair();
     }
 
     public void Unlock()
     {
         Cursor.lockState = CursorLockMode.None;
-        cursor.SetActive(false);
+        Cursor.visible = true;
+        if (!isCarrying) HideCrosshair();
     }
+
+    public void HideOnCarry()
+    {
+        HideCrosshair();
+        isCarrying = true;
+    }
+
+    public void ShowOnDrop()
+    {
+        ShowCrosshair();
+        isCarrying = false;
+    }
+
+    private void HideCrosshair() => crosshair.SetActive(false);
+    private void ShowCrosshair() => crosshair.SetActive(true);
 }
