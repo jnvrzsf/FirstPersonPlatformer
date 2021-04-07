@@ -5,8 +5,8 @@ using UnityEngine;
 public class Menu : MonoBehaviour
 {
     private bool isPaused;
-    [SerializeField] GameObject menu;
-    [SerializeField] CursorController cursor;
+    [SerializeField] private GameObject menu;
+    [SerializeField] private CursorController cursor;
 
     private void Awake()
     {
