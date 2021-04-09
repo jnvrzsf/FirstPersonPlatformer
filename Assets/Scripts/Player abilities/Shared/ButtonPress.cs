@@ -5,18 +5,18 @@ using UnityEngine;
 public class ButtonPress : MonoBehaviour
 {
     private RayFromCamera ray;
-    private PlayerInput playerInput;
+    private InputManager input;
     private const float maxDistance = 2;
 
-    void Start()
+    void Awake()
     {
         ray = GetComponent<RayFromCamera>();
-        playerInput = GetComponent<PlayerInput>();
+        input = FindObjectOfType<InputManager>();
     }
 
     void Update()
     {
-        if (playerInput.IsActionPressed)
+        if (input.PressedAction)
         {
             if (ray.hitSomething && ray.hitInfo.distance < maxDistance && ray.hitInfo.transform.CompareTag("Button"))
             {

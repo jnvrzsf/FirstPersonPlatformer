@@ -5,7 +5,7 @@ using UnityEngine;
 public class Carrying : MonoBehaviour
 {
     public Transform carryPoint;
-    private PlayerInput playerInput;
+    private InputManager input;
     private RayFromCamera ray;
     private Pickupable pickupObject;
     private CursorController cursor;
@@ -16,9 +16,9 @@ public class Carrying : MonoBehaviour
     private float distance => Vector3.Distance(carryPoint.position, pickupObject.transform.position);
     private float maxDistance = 5f;
 
-    private void Start()
+    private void Awake()
     {
-        playerInput = GetComponent<PlayerInput>();
+        input = FindObjectOfType<InputManager>();
         ray = GetComponent<RayFromCamera>();
         cursor = FindObjectOfType<CursorController>();
         player = GetComponent<FirstPersonRBCharacterController>();
@@ -29,14 +29,14 @@ public class Carrying : MonoBehaviour
     {
         if (isCarrying)
         {
-            if (!playerTrigger.isPickupableOverlapping && (playerInput.IsActionPressed || distance > maxDistance))
+            if (!playerTrigger.isPickupableOverlapping && (input.PressedAction || distance > maxDistance))
             {
                 Drop();
             }
         }
         else
         {
-            if (playerInput.IsActionPressed)
+            if (input.PressedAction)
             {
                 PickUp();
             }

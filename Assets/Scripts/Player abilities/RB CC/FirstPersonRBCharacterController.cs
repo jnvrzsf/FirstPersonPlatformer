@@ -7,7 +7,7 @@ public class FirstPersonRBCharacterController : MonoBehaviour
 {
     private Rigidbody rb;
     private Collider col;
-    private PlayerInput playerInput;
+    private InputManager input;
     [SerializeField] private Transform orientation;
 
     private float walkSpeed = 5f;
@@ -29,16 +29,16 @@ public class FirstPersonRBCharacterController : MonoBehaviour
     private Vector3 horizontalDirection;
     private Vector3 projectedDirection;
 
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
-        playerInput = GetComponent<PlayerInput>();
+        input = FindObjectOfType<InputManager>();
     }
 
     private void Update()
     {
-        if (playerInput.IsJumpPressed && canJump)
+        if (input.PressedJump && canJump)
         {
             jump = true;
         }
@@ -48,7 +48,7 @@ public class FirstPersonRBCharacterController : MonoBehaviour
     {
         CheckGround();
 
-        horizontalDirection = (orientation.transform.forward * playerInput.Vertical + orientation.transform.right * playerInput.Horizontal).normalized;
+        horizontalDirection = (orientation.transform.forward * input.Vertical + orientation.transform.right * input.Horizontal).normalized;
         projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, raycastHit.normal).normalized;
 
         float x = 0;
@@ -58,7 +58,7 @@ public class FirstPersonRBCharacterController : MonoBehaviour
 
         if (isOnSlope)
         {
-            if (playerInput.Horizontal == 0 && playerInput.Vertical == 0 && isGrounded)
+            if (input.Horizontal == 0 && input.Vertical == 0 && isGrounded)
             {
                 rb.useGravity = false;
             }

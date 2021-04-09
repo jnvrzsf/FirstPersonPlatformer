@@ -7,15 +7,17 @@ public class Menu : MonoBehaviour
     private bool isPaused;
     [SerializeField] private GameObject menu;
     [SerializeField] private CursorController cursor;
+    private InputManager input;
 
     private void Awake()
     {
+        input = FindObjectOfType<InputManager>();
         menu.SetActive(false);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (input.PressedEscape)
         {
             if (isPaused)
             {

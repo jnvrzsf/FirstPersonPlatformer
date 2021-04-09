@@ -6,21 +6,22 @@ public class ControllOrientation : MonoBehaviour
 {
     [SerializeField] private Transform playerSight;
     [SerializeField] private Transform playerOrientation;
-    [SerializeField] private PlayerInput playerInput;
+    private InputManager input;
     private float xRotation;
     private float yRotation;
     private float mouseSensitivityX = 250f;
     private float mouseSensitivityY = 400f;
 
-    void Start()
+    void Awake()
     {
+        input = FindObjectOfType<InputManager>();
         yRotation = transform.rotation.eulerAngles.y;
     }
 
     void Update()
     {
-        xRotation -= playerInput.MouseY * mouseSensitivityY * Time.deltaTime;
-        yRotation += playerInput.MouseX * mouseSensitivityX * Time.deltaTime;
+        xRotation -= input.MouseY * mouseSensitivityY * Time.deltaTime;
+        yRotation += input.MouseX * mouseSensitivityX * Time.deltaTime;
 
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 

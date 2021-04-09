@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2761513944326587723}
   - component: {fileID: 7661759303851279376}
   - component: {fileID: 2761513944326587722}
-  - component: {fileID: 8945068020515966137}
   - component: {fileID: 8702180112706870215}
   - component: {fileID: 301333931955731223}
   - component: {fileID: 3176667311526769153}
@@ -103,18 +102,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1537
   pickupablesUnderPlayer: []
---- !u!114 &8945068020515966137
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2761513944326587732}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4b51ae8058d16d4f8b34ac1acb10e58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8702180112706870215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerSight: {fileID: 3507689825165289285}
   playerOrientation: {fileID: 3507689824318255921}
-  playerInput: {fileID: 8945068020515966137}
+  playerInput: {fileID: 0}
 --- !u!1 &3507689824318255920
 GameObject:
   m_ObjectHideFlags: 0

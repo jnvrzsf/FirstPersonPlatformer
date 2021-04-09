@@ -3,7 +3,7 @@
 public class FirstPersonCharacterController : MonoBehaviour
 {
     private CharacterController controller;
-    private PlayerInput playerInput;
+    private InputManager input;
 
     private bool isXLocked;
     private bool isZLocked;
@@ -28,10 +28,10 @@ public class FirstPersonCharacterController : MonoBehaviour
 
     public bool isFrozen;
 
-    void Start()
+    void Awake()
     {
         controller = GetComponent<CharacterController>();
-        playerInput = GetComponent<PlayerInput>();
+        input = FindObjectOfType<InputManager>();
     }
 
     void Update()
@@ -50,9 +50,9 @@ public class FirstPersonCharacterController : MonoBehaviour
                 isRunningLocked = false;
 
                 // calculate move vector
-                Vector3 horizontalDirection = (transform.forward * playerInput.Vertical + transform.right * playerInput.Horizontal).normalized;
+                Vector3 horizontalDirection = (transform.forward * input.Vertical + transform.right * input.Horizontal).normalized;
                 Vector3 projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, hitInfo.normal).normalized;
-                moveSpeed = playerInput.IsRunPressed ? runSpeed : walkSpeed;
+                moveSpeed = input.IsPressingRun ? runSpeed : walkSpeed;
                 moveVector = projectedDirection * moveSpeed;
 
                 // add gravity to move vector
@@ -63,14 +63,14 @@ public class FirstPersonCharacterController : MonoBehaviour
             else
             {
                 // lock horizontal movement if it halted mid air
-                if (playerInput.Vertical == 0) isXLocked = true;
-                if (playerInput.Horizontal == 0) isZLocked = true;
+                if (input.Vertical == 0) isXLocked = true;
+                if (input.Horizontal == 0) isZLocked = true;
                 // lock speed
-                if (playerInput.IsRunPressed) isRunningLocked = true;
+                if (input.IsPressingRun) isRunningLocked = true;
 
                 // calculate move vector
-                float x = isXLocked ? 0 : playerInput.Vertical;
-                float z = isZLocked ? 0 : playerInput.Horizontal;
+                float x = isXLocked ? 0 : input.Vertical;
+                float z = isZLocked ? 0 : input.Horizontal;
                 Vector3 horizontalDirection = (transform.forward * x + transform.right * z).normalized;
                 moveSpeed = isRunningLocked ? runSpeed : walkSpeed;
                 moveVector = horizontalDirection * moveSpeed;
@@ -81,7 +81,7 @@ public class FirstPersonCharacterController : MonoBehaviour
             }
 
             // jump
-            if (playerInput.IsJumpPressed && (canJump || controller.isGrounded))
+            if (input.PressedJump && (canJump || controller.isGrounded))
             {
                 verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
                 moveVector.y = verticalVelocity;
