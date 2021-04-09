@@ -6,6 +6,7 @@ public class RewindOnDeath : MonoBehaviour
 {
     [SerializeField] private FirstPersonCharacterController playerController;
     [SerializeField] private CameraController cameraController;
+    private InputManager input;
     private LinkedList<Record> bodyRecords;
     private LinkedList<Quaternion> cameraRecords;
     private bool isDead;
@@ -13,10 +14,11 @@ public class RewindOnDeath : MonoBehaviour
     private const float recordTimeInSeconds = 5f;
     public float maximumCount => Mathf.Round(recordTimeInSeconds / Time.fixedDeltaTime);
 
-    void Start()
+    void Awake()
     {
         bodyRecords = new LinkedList<Record>();
         cameraRecords = new LinkedList<Quaternion>();
+        input = FindObjectOfType<InputManager>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -31,11 +33,11 @@ public class RewindOnDeath : MonoBehaviour
     {
         if (isDead)
         {
-            if (Input.GetMouseButtonDown(1))
+            if (input.PressedRewind)
             {
                 isRewinding = true;
             }
-            if (Input.GetMouseButtonUp(1))
+            if (input.ReleasedRewind)
             {
                 isRewinding = false;
                 UnfreezePlayer();

@@ -4,18 +4,23 @@ using UnityEngine;
 
 public abstract class Rewindable : MonoBehaviour
 {
+    private InputManager input;
     protected bool isRewinding;
     protected float recordTimeInSeconds = 5f;
 
+    private void Awake()
+    {
+        input = FindObjectOfType<InputManager>();
+    }
     protected abstract void Start();
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (input.PressedRewind)
         {
             StartRewinding();
         }
-        if (Input.GetKeyUp(KeyCode.R))
+        if (input.ReleasedRewind)
         {
             StopRewinding();
         }
