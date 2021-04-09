@@ -17,11 +17,11 @@ TagManager:
   - UI
   - 
   - 
-  - Pickupable
-  - Platform
-  - MovingPlatform
+  - Player
   - Ground
-  - DestructiveField
+  - PickupableObject
+  - PickedUpObject
+  - 
   - 
   - 
   - 

@@ -9,6 +9,8 @@ public class Carrying : MonoBehaviour
     private RayFromCamera ray;
     private Pickupable pickupObject;
     private CursorController cursor;
+    private FirstPersonRBCharacterController player;
+    private PlayerTrigger playerTrigger;
 
     private bool isCarrying => pickupObject != null;
     private float distance => Vector3.Distance(carryPoint.position, pickupObject.transform.position);
@@ -19,13 +21,15 @@ public class Carrying : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         ray = GetComponent<RayFromCamera>();
         cursor = FindObjectOfType<CursorController>();
+        player = GetComponent<FirstPersonRBCharacterController>();
+        playerTrigger = GetComponentInChildren<PlayerTrigger>();
     }
 
     private void Update()
     {
         if (isCarrying)
         {
-            if (playerInput.IsActionPressed || distance > maxDistance)
+            if (!playerTrigger.isPickupableOverlapping && (playerInput.IsActionPressed || distance > maxDistance))
             {
                 Drop();
             }
@@ -51,6 +55,17 @@ public class Carrying : MonoBehaviour
     {
         if (ray.hitSomething && ray.hitInfo.distance < maxDistance)
         {
+            if (player.pickupablesUnderPlayer.Count > 0)
+            {
+                foreach (GameObject pickupable in player.pickupablesUnderPlayer)
+                {
+                    if (GameObject.ReferenceEquals(ray.hitInfo.collider.gameObject, pickupable))
+                    {
+                        return;
+                    }
+                }
+            }
+
             Pickupable p = ray.hitInfo.collider.GetComponent<Pickupable>();
             if (p != null)
             {

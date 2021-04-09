@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class FirstPersonRBCharacterController : MonoBehaviour
@@ -8,20 +9,22 @@ public class FirstPersonRBCharacterController : MonoBehaviour
     private Collider col;
     private PlayerInput playerInput;
     [SerializeField] private Transform orientation;
-    private bool jump;
 
     private float walkSpeed = 5f;
     private Vector3 moveVector;
-    private float jumpForce = 8f;
+    private float jumpForce = 9.5f;
 
     [Header("Ground Detection")]
     [SerializeField] private LayerMask groundMask;
-    private RaycastHit hitInfo;
-    private float groundDistance = 0.2f; // player width: 1, max slope angle: 45 degrees
+    private RaycastHit raycastHit;
+    private RaycastHit[] sphereCastHits;
+    private float groundDistance = 0.2f;
     private float jumpDistance = 0.8f;
-    private bool isGrounded => hitInfo.distance < col.bounds.extents.y + groundDistance;
-    private bool canJump => hitInfo.distance < col.bounds.extents.y + jumpDistance;
-    private bool isOnSlope => isGrounded && hitInfo.normal != Vector3.up ? true : false;
+    private bool isGrounded;
+    private bool canJump;
+    private bool jump;
+    private bool isOnSlope;
+    [HideInInspector] public List<GameObject> pickupablesUnderPlayer;
 
     private Vector3 horizontalDirection;
     private Vector3 projectedDirection;
@@ -43,16 +46,15 @@ public class FirstPersonRBCharacterController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.useGravity = true;
-
-        CastRayDown();
+        CheckGround();
 
         horizontalDirection = (orientation.transform.forward * playerInput.Vertical + orientation.transform.right * playerInput.Horizontal).normalized;
-        projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, hitInfo.normal).normalized;
+        projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, raycastHit.normal).normalized;
 
         float x = 0;
         float y = 0;
         float z = 0;
+        rb.useGravity = true;
 
         if (isOnSlope)
         {
@@ -84,8 +86,47 @@ public class FirstPersonRBCharacterController : MonoBehaviour
         rb.velocity = moveVector;
     }
 
-    private void CastRayDown()
+    private void CheckGround()
     {
-        Physics.Raycast(transform.position, Vector3.down, out hitInfo);
+        float sphereRadius = col.bounds.extents.x;
+        Vector3 position = new Vector3(transform.position.x, transform.position.y - col.bounds.extents.x, transform.position.z);
+        sphereCastHits = Physics.SphereCastAll(position, sphereRadius, Vector3.down, jumpDistance, groundMask, QueryTriggerInteraction.Ignore);
+        List<GameObject> pickupables = new List<GameObject>();
+        if (sphereCastHits.Length > 0)
+        {
+            canJump = true;
+            foreach (RaycastHit hit in sphereCastHits)
+            {
+                if (hit.distance < groundDistance)
+                {
+                    isGrounded = true;
+                    if (hit.collider.gameObject.layer == 10)
+                    {
+                        pickupables.Add(hit.collider.gameObject);
+                    }
+                }
+                else
+                {
+                    isGrounded = false;
+                }
+            }
+        }
+        else
+        {
+            canJump = false;
+            isGrounded = false;
+        }
+        pickupablesUnderPlayer = pickupables;
+
+        if (isGrounded)
+        {
+            Physics.Raycast(transform.position, Vector3.down, out raycastHit); // TODO: set max length, ground mask, turn off trigger interaction, set position to be at feet (create a transform and feed it to every raycast?)
+            isOnSlope = raycastHit.normal != Vector3.up ? true : false;
+        }
+        else
+        {
+            isOnSlope = false;
+        }
+
     }
 }

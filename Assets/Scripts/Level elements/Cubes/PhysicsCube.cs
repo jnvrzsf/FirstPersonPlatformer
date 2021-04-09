@@ -7,12 +7,14 @@ public class PhysicsCube : Pickupable
     public override void SetToPickedUp(Carrying c)
     {
         carrier = c;
-        rb.useGravity = false;
+        gameObject.layer = 11;
     }
 
     public override void SetToDropped()
     {
         carrier = null;
-        rb.useGravity = true;
+        gameObject.layer = 10;
+        // instead: Physics.IgnoreCollision(col, collision.collider, false); delete layer, get it on collision, save reference to collider, reset when dropped
+        // ne lehessen lerakni ha benne vok, különben ki is lőheti a playert felfele
     }
 }

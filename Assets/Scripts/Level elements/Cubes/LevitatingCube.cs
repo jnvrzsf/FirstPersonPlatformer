@@ -8,11 +8,13 @@ public class LevitatingCube : Pickupable
     {
         carrier = c;
         rb.isKinematic = false;
+        gameObject.layer = 11;
     }
 
     public override void SetToDropped()
     {
         carrier = null;
         rb.isKinematic = true;
+        gameObject.layer = 10;
     }
 }

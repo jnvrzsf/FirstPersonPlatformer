@@ -10,13 +10,12 @@ public abstract class Pickupable : MonoBehaviour
     private Renderer rend;
     protected Carrying carrier;
     [HideInInspector] public SpawnButton spawner;
-    public bool canBePickedUp { get; set; } = true; // TODO: figure out why i have to set this
-    protected bool isPickedUp => carrier != null;
+    public bool canBePickedUp { get; set; } = true; // TODO: figure out why i have to set i like this
+    protected bool isCarried => carrier != null;
     protected float minSpeed = 0;
     protected float maxSpeed = 8000;
-    protected float magnitudeLimit = 15;
 
-    [SerializeField] private Material dissolveMat; // assign for all
+    [SerializeField] private Material dissolveMat;
     private bool isDissolving;
     private const float dissolveSpeed = 1f;
 
