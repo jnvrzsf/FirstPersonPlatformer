@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class ControllOrientation : MonoBehaviour
+public class MouseLook : MonoBehaviour
 {
     [SerializeField] private Transform playerSight;
     [SerializeField] private Transform playerOrientation;
@@ -12,13 +10,13 @@ public class ControllOrientation : MonoBehaviour
     private float mouseSensitivityX = 250f;
     private float mouseSensitivityY = 400f;
 
-    void Awake()
+    private void Awake()
     {
         input = FindObjectOfType<InputManager>();
         yRotation = transform.rotation.eulerAngles.y;
     }
 
-    void Update()
+    private void Update()
     {
         xRotation -= input.MouseY * mouseSensitivityY * Time.deltaTime;
         yRotation += input.MouseX * mouseSensitivityX * Time.deltaTime;
@@ -26,6 +24,6 @@ public class ControllOrientation : MonoBehaviour
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         playerSight.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        playerOrientation.rotation = Quaternion.Euler(0, yRotation, 0); 
+        playerOrientation.rotation = Quaternion.Euler(0, yRotation, 0);
     }
 }
