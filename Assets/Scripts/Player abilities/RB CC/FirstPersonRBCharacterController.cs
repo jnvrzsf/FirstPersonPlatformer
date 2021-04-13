@@ -10,24 +10,30 @@ public class FirstPersonRBCharacterController : MonoBehaviour
     private InputManager input;
     [SerializeField] private Transform orientation;
 
-    private float walkSpeed = 5f;
-    private Vector3 moveVector;
-    private float jumpForce = 9.5f;
-
-    [Header("Ground Detection")]
-    [SerializeField] private LayerMask groundMask;
+    private Vector3 horizontalDirection;
+    private Vector3 projectedDirection;
+    private float x;
+    private float y;
+    private float z;
+    [SerializeField]
+    private LayerMask groundMask;
     private RaycastHit raycastHit;
     private RaycastHit[] sphereCastHits;
-    private float groundDistance = 0.2f;
-    private float jumpDistance = 0.8f;
-    private bool isGrounded;
     private bool canJump;
     private bool jump;
     private bool isOnSlope;
-    [HideInInspector] public List<GameObject> pickupablesUnderPlayer;
+    private bool isSlopeTooSteep;
+    [HideInInspector]
+    public List<GameObject> pickupablesUnderPlayer;
+    private const float walkSpeed = 5f;
+    private const float jumpForce = 9.5f;
+    private const float largeGroundOffset = 0.8f; // can we jump
+    private const float smallGroundOffset = 0.2f; // are we on a slope, are we standing on a cube
+    private const float maxSlopeAngle = 45;
 
-    private Vector3 horizontalDirection;
-    private Vector3 projectedDirection;
+    private bool isFrozen;
+    public void Freeze() => isFrozen = true;
+    public void Unfreeze() => isFrozen = false;
 
     void Awake()
     {
@@ -38,95 +44,112 @@ public class FirstPersonRBCharacterController : MonoBehaviour
 
     private void Update()
     {
-        if (input.PressedJump && canJump)
+        if (!isFrozen)
         {
-            jump = true;
+            if (input.PressedJump)
+            {
+                jump = true;
+            }
         }
     }
 
     private void FixedUpdate()
     {
-        CheckGround();
-
-        horizontalDirection = (orientation.transform.forward * input.Vertical + orientation.transform.right * input.Horizontal).normalized;
-        projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, raycastHit.normal).normalized;
-
-        float x = 0;
-        float y = 0;
-        float z = 0;
-        rb.useGravity = true;
-
-        if (isOnSlope)
+        if (!isFrozen)
         {
-            if (input.Horizontal == 0 && input.Vertical == 0 && isGrounded)
+            CheckGround();
+
+            horizontalDirection = (orientation.transform.forward * input.Vertical + orientation.transform.right * input.Horizontal).normalized;
+            projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, raycastHit.normal).normalized;
+
+            x = 0;
+            y = 0;
+            z = 0;
+            rb.useGravity = true;
+
+            // we are on a slope and we settled on the ground
+            if (isOnSlope) 
             {
-                rb.useGravity = false;
+                if (!isSlopeTooSteep)
+                {
+                    // turn off gravity if there is no input
+                    if (input.Horizontal == 0 && input.Vertical == 0)
+                    {
+                        rb.useGravity = false;
+                    }
+                    // walk according to the direction projected on the slope
+                    else
+                    {
+                        x = projectedDirection.x * walkSpeed;
+                        y = projectedDirection.y * walkSpeed;
+                        z = projectedDirection.z * walkSpeed;
+                    }
+                }
+                else
+                {
+                    // don't turn off gravity, add a little, let it slide down
+                    x = projectedDirection.x * walkSpeed;
+                    y = -2f;
+                    z = projectedDirection.z * walkSpeed;
+                    jump = false;
+                }
             }
+            // walking on normal ground / falling - applies gravity
             else
             {
                 x = projectedDirection.x * walkSpeed;
-                y = projectedDirection.y * walkSpeed;
+                y = rb.velocity.y;
                 z = projectedDirection.z * walkSpeed;
             }
-        }
-        else
-        {
-            x = projectedDirection.x * walkSpeed;
-            y = rb.velocity.y;
-            z = projectedDirection.z * walkSpeed;
-        }
 
-        if (jump)
-        {
-            y = jumpForce;
+            if (jump && canJump)
+            {
+                y = jumpForce;
+            }
             jump = false;
-        }
 
-        moveVector = new Vector3(x, y, z);
-        rb.velocity = moveVector;
+            rb.velocity = new Vector3(x, y, z);
+        }
     }
 
     private void CheckGround()
     {
-        float sphereRadius = col.bounds.extents.x;
-        Vector3 position = new Vector3(transform.position.x, transform.position.y - col.bounds.extents.x, transform.position.z);
-        sphereCastHits = Physics.SphereCastAll(position, sphereRadius, Vector3.down, jumpDistance, groundMask, QueryTriggerInteraction.Ignore);
+        // check if we can jump, if we are standing on cubes
+        float radius = col.bounds.extents.x - 0.001f; // little smaller than the capsule's, so that we can't jump off walls
+        Vector3 position = new Vector3(transform.position.x, transform.position.y - col.bounds.extents.y + col.bounds.extents.x, transform.position.z);
+        sphereCastHits = Physics.SphereCastAll(position, radius, Vector3.down, largeGroundOffset, groundMask, QueryTriggerInteraction.Ignore);
         List<GameObject> pickupables = new List<GameObject>();
         if (sphereCastHits.Length > 0)
         {
             canJump = true;
             foreach (RaycastHit hit in sphereCastHits)
             {
-                if (hit.distance < groundDistance)
+                if (hit.distance < smallGroundOffset && hit.collider.gameObject.layer == 10)
                 {
-                    isGrounded = true;
-                    if (hit.collider.gameObject.layer == 10)
-                    {
-                        pickupables.Add(hit.collider.gameObject);
-                    }
-                }
-                else
-                {
-                    isGrounded = false;
+                    pickupables.Add(hit.collider.gameObject);
                 }
             }
         }
         else
         {
             canJump = false;
-            isGrounded = false;
         }
         pickupablesUnderPlayer = pickupables;
 
-        if (isGrounded)
+        // check if we are on a slope and the slope angle
+        if (canJump) // only if we are no farther than jump distance from the ground
         {
-            Physics.Raycast(transform.position, Vector3.down, out raycastHit); // TODO: set max length, ground mask, turn off trigger interaction, set position to be at feet (create a transform and feed it to every raycast?)
-            isOnSlope = raycastHit.normal != Vector3.up ? true : false;
+            Vector3 feetPosition = new Vector3(transform.position.x, transform.position.y - col.bounds.extents.y, transform.position.z);
+            if (Physics.Raycast(feetPosition, Vector3.down, out raycastHit, smallGroundOffset, groundMask, QueryTriggerInteraction.Ignore))
+            {
+                float groundAngle = Vector3.Angle(Vector3.up, raycastHit.normal);
+                isOnSlope = groundAngle > 0f ? true : false;
+                isSlopeTooSteep = groundAngle > maxSlopeAngle ? true : false;
+            }
+            else
+            {
+                isOnSlope = false;
+            }
         }
-        else
-        {
-            isOnSlope = false;
-        }
-
     }
 }

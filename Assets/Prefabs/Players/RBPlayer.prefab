@@ -11,12 +11,14 @@ GameObject:
   - component: {fileID: 2761513944326587734}
   - component: {fileID: 2761513944326587720}
   - component: {fileID: 2761513944326587723}
-  - component: {fileID: 7661759303851279376}
   - component: {fileID: 2761513944326587722}
   - component: {fileID: 8702180112706870215}
   - component: {fileID: 301333931955731223}
   - component: {fileID: 3176667311526769153}
   - component: {fileID: 9002088580469487711}
+  - component: {fileID: 1483697550}
+  - component: {fileID: 1483697551}
+  - component: {fileID: 1483697552}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -64,25 +66,11 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2761513944326587732}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.48
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &7661759303851279376
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2761513944326587732}
   m_Material: {fileID: 13400000, guid: 8cb2c986c473a9a4b8253112c1151c59, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1.9
+  m_Radius: 0.25
+  m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2761513944326587722
@@ -154,7 +142,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerSight: {fileID: 3507689825165289285}
   playerOrientation: {fileID: 3507689824318255921}
-  playerInput: {fileID: 0}
+--- !u!114 &1483697550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2761513944326587732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68f2aac35a18c024e9635fc2b677ed9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1483697551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2761513944326587732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aea12875834d6164ba4c847b19cb7429, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1483697552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2761513944326587732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 367e2549d21f5974995ba5bf1fae0370, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 3507689825165289285}
+  orientation: {fileID: 3507689824318255921}
 --- !u!1 &3507689824318255920
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,7 +221,7 @@ GameObject:
   - component: {fileID: 3507689825165289285}
   - component: {fileID: 3507689825165289286}
   m_Layer: 0
-  m_Name: Sight
+  m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -273,7 +298,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3507689826184123579}
   m_Layer: 0
-  m_Name: SightPosition
+  m_Name: CameraPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -450,7 +475,7 @@ GameObject:
   - component: {fileID: 1251732651366041353}
   - component: {fileID: 1499113914}
   m_Layer: 0
-  m_Name: Trigger
+  m_Name: TriggerCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -480,7 +505,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.5
+  m_Radius: 0.25
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
