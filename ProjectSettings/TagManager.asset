@@ -6,7 +6,6 @@ TagManager:
   tags:
   - DestructiveField
   - MovingObject
-  - Button
   - DeathZone
   layers:
   - Default

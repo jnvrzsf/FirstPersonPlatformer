@@ -11,7 +11,7 @@ public class SpawnButton : MonoBehaviour
     private Coroutine coroutine;
 
     private const float secondsBetweenPresses = 2f;
-    private const float buttonDip = 0.04f;
+    private const float buttonDip = 0.05f;
 
     private void Start()
     {
