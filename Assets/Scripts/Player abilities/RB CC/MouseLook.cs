@@ -9,6 +9,7 @@ public class MouseLook : MonoBehaviour
     private float yRotation;
     private float mouseSensitivityX = 250f;
     private float mouseSensitivityY = 400f;
+    private bool isFrozen;
 
     private void Awake()
     {
@@ -18,12 +19,18 @@ public class MouseLook : MonoBehaviour
 
     private void Update()
     {
-        xRotation -= input.MouseY * mouseSensitivityY * Time.deltaTime;
-        yRotation += input.MouseX * mouseSensitivityX * Time.deltaTime;
+        if (!isFrozen)
+        {
+            xRotation -= input.MouseY * mouseSensitivityY * Time.deltaTime;
+            yRotation += input.MouseX * mouseSensitivityX * Time.deltaTime;
 
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        playerSight.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        playerOrientation.rotation = Quaternion.Euler(0, yRotation, 0);
+            playerSight.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+            playerOrientation.rotation = Quaternion.Euler(0, yRotation, 0);
+        }
     }
+
+    public void Freeze() => isFrozen = true;
+    public void Unfreeze() => isFrozen = false;
 }

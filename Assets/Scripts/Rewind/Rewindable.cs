@@ -4,32 +4,16 @@ using UnityEngine;
 
 public abstract class Rewindable : MonoBehaviour
 {
-    private InputManager input;
     protected bool isRewinding;
-    protected float recordTimeInSeconds = 5f;
+    protected float recordTimeInSeconds = 10f;
+    protected float maximumCount => Mathf.Round(recordTimeInSeconds / Time.fixedDeltaTime);
 
-    private void Awake()
-    {
-        input = FindObjectOfType<InputManager>();
-    }
-    protected abstract void Start();
+    protected abstract void Awake();
 
-    private void Update()
-    {
-        if (input.PressedRewind)
-        {
-            StartRewinding();
-        }
-        if (input.ReleasedRewind)
-        {
-            StopRewinding();
-        }
-    }
+    public virtual void StartRewinding() => isRewinding = true;
+    public virtual void StopRewinding() => isRewinding = false;
 
-    protected virtual void StartRewinding() => isRewinding = true;
-    protected virtual void StopRewinding() => isRewinding = false;
-
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if (isRewinding)
         {

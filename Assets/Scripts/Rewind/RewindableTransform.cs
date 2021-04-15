@@ -6,7 +6,7 @@ public class RewindableTransform : Rewindable
 {
     private LinkedList<Record> records;
 
-    protected override void Start()
+    protected override void Awake()
     {
         records = new LinkedList<Record>();
     }
@@ -14,7 +14,7 @@ public class RewindableTransform : Rewindable
     protected override void Record()
     {
         records.AddFirst(new Record(transform.position, transform.rotation));
-        if (records.Count > Mathf.Round(recordTimeInSeconds / Time.fixedDeltaTime))
+        if (records.Count > maximumCount)
         {
             records.RemoveLast();
         }

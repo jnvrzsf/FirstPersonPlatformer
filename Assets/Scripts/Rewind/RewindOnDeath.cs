@@ -21,14 +21,6 @@ public class RewindOnDeath : MonoBehaviour
         input = FindObjectOfType<InputManager>();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("DeathZone"))
-        {
-            isDead = true;
-        }
-    }
-
     private void Update()
     {
         if (isDead)

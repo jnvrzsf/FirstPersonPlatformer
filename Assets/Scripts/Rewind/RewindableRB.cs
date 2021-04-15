@@ -7,22 +7,24 @@ public class RewindableRB : Rewindable
     private LinkedList<RBRecord> records;
     private Rigidbody rb;
 
-    protected override void Start()
+    protected override void Awake()
     {
         records = new LinkedList<RBRecord>();
         rb = GetComponent<Rigidbody>();
     }
 
-    protected override void StartRewinding()
+    public override void StartRewinding()
     {
         base.StartRewinding();
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
         rb.isKinematic = true;
     }
 
-    protected override void StopRewinding()
+    public override void StopRewinding()
     {
         base.StopRewinding();
         rb.isKinematic = false;
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
         ReapplyForces();
     }
 
@@ -39,7 +41,7 @@ public class RewindableRB : Rewindable
     protected override void Record()
     {
         records.AddFirst(new RBRecord(transform.position, transform.rotation, rb.velocity, rb.angularVelocity));
-        if (records.Count > Mathf.Round(recordTimeInSeconds / Time.fixedDeltaTime))
+        if (records.Count > maximumCount)
         {
             records.RemoveLast();
         }
