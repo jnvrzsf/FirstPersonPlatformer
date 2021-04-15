@@ -25,6 +25,8 @@ public class FirstPersonRBCharacterController : MonoBehaviour
     private bool isSlopeTooSteep;
     [HideInInspector]
     public List<GameObject> pickupablesUnderPlayer;
+    private bool isOnRideableObject;
+    private Transform rideableObjectUnderPlayer;
     private const float walkSpeed = 5f;
     private const float jumpForce = 9.5f;
     private const float largeGroundOffset = 0.8f; // can we jump
@@ -58,6 +60,15 @@ public class FirstPersonRBCharacterController : MonoBehaviour
         if (!isFrozen)
         {
             CheckGround();
+
+            if (isOnRideableObject)
+            {
+                transform.SetParent(rideableObjectUnderPlayer);
+            }
+            else
+            {
+                transform.SetParent(null);
+            }
 
             horizontalDirection = (orientation.transform.forward * input.Vertical + orientation.transform.right * input.Horizontal).normalized;
             projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, raycastHit.normal).normalized;
@@ -114,19 +125,30 @@ public class FirstPersonRBCharacterController : MonoBehaviour
 
     private void CheckGround()
     {
-        // check if we can jump, if we are standing on cubes
-        float radius = col.bounds.extents.x - 0.001f; // little smaller than the capsule's, so that we can't jump off walls
+        // check if we can jump, if we are standing on cubes or a moving object
+        float radius = col.bounds.extents.x - 0.01f; // little smaller than the capsule's, so that we can't jump off walls
         Vector3 position = new Vector3(transform.position.x, transform.position.y - col.bounds.extents.y + col.bounds.extents.x, transform.position.z);
         sphereCastHits = Physics.SphereCastAll(position, radius, Vector3.down, largeGroundOffset, groundMask, QueryTriggerInteraction.Ignore);
+
+        isOnRideableObject = false;
         List<GameObject> pickupables = new List<GameObject>();
         if (sphereCastHits.Length > 0)
         {
             canJump = true;
             foreach (RaycastHit hit in sphereCastHits)
             {
-                if (hit.distance < smallGroundOffset && hit.collider.gameObject.layer == 10)
+                if (hit.distance < smallGroundOffset)
                 {
-                    pickupables.Add(hit.collider.gameObject);
+                    if (hit.collider.gameObject.layer == 10)
+                    {
+                        pickupables.Add(hit.collider.gameObject);
+                    }
+
+                    if (hit.collider.CompareTag("RideableObject"))
+                    {
+                        isOnRideableObject = true;
+                        rideableObjectUnderPlayer = hit.collider.gameObject.transform; // ? hit.transform
+                    }
                 }
             }
         }

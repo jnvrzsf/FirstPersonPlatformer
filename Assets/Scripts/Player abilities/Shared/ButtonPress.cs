@@ -18,10 +18,13 @@ public class ButtonPress : MonoBehaviour
     {
         if (input.PressedAction)
         {
-            SpawnButton button = ray.hitInfo.collider.GetComponent<SpawnButton>();
-            if (ray.hitSomething && ray.hitInfo.distance < maxDistance && button != null)
+            if (ray.hitSomething && ray.hitInfo.distance < maxDistance)
             {
-                button.TryPress();
+                SpawnButton button = ray.hitInfo.collider.GetComponent<SpawnButton>();
+                if (button != null)
+                {
+                    button.TryPress();
+                }
             }
         }
     }

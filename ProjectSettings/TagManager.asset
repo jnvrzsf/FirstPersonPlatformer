@@ -5,8 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - DestructiveField
-  - MovingObject
   - DeathZone
+  - RideableObject
   layers:
   - Default
   - TransparentFX
