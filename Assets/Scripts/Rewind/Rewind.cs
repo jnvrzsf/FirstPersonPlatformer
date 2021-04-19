@@ -18,10 +18,14 @@ public class Rewind : MonoBehaviour
     {
         if (input.PressedRewind)
         {
-            if (input.IsPressingRun) // playerState.IsDead, shift ne run legyen
+            if (input.IsPressingRun)
             {
                 rewindedObject = GetComponent<RewindablePlayer>();
                 // unfreeze player
+                if (playerState.IsDead)
+                {
+                    Time.timeScale = 1f;
+                }
                 rewindedObject.StartRewinding();
             }
             else

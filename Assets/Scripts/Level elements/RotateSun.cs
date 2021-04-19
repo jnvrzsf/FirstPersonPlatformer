@@ -2,7 +2,7 @@
 
 public class RotateSun : MonoBehaviour
 {
-    private const float rotationSpeed = 40;
+    private const float rotationSpeed = 50;
 
     void Update()
     {

@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Menu : MonoBehaviour
+public class PauseMenu : MonoBehaviour
 {
     private bool isPaused;
     [SerializeField] private GameObject menu;
+    [SerializeField] private GameObject popup;
     [SerializeField] private CursorController cursor;
     private InputManager input;
 
@@ -31,12 +30,15 @@ public class Menu : MonoBehaviour
         }
     }
 
+    private void PauseTime() => Time.timeScale = 0f;
+    private void ResumeTime() => Time.timeScale = 1f;
+
     private void Pause()
     {
         isPaused = true;
         cursor.Unlock();
         menu.SetActive(true);
-        Time.timeScale = 0f;
+        PauseTime();
     }
 
     public void Resume()
@@ -44,13 +46,29 @@ public class Menu : MonoBehaviour
         isPaused = false;
         menu.SetActive(false);
         cursor.Lock();
-        Time.timeScale = 1f;
+        ResumeTime();
     }
 
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        Time.timeScale = 1f;
+        ResumeTime();
+    }
+
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+        ResumeTime();
+    }
+
+    public void ShowPopup()
+    {
+        popup.SetActive(true);
+    }
+
+    public void HidePopup()
+    {
+        popup.SetActive(false);
     }
 
     public void Quit()
