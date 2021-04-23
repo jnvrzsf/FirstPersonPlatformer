@@ -9,7 +9,7 @@ public class Carrying : MonoBehaviour
     private RayFromCamera ray;
     private Pickupable pickupObject;
     private CursorController cursor;
-    private FirstPersonRBCharacterController player;
+    private PlayerMovement player;
     private PlayerTrigger playerTrigger;
 
     private bool isCarrying => pickupObject != null;
@@ -21,7 +21,7 @@ public class Carrying : MonoBehaviour
         input = FindObjectOfType<InputManager>();
         ray = GetComponent<RayFromCamera>();
         cursor = FindObjectOfType<CursorController>();
-        player = GetComponent<FirstPersonRBCharacterController>();
+        player = GetComponent<PlayerMovement>();
         playerTrigger = GetComponentInChildren<PlayerTrigger>();
     }
 

@@ -5,13 +5,13 @@ using UnityEngine;
 public class PlayerState : MonoBehaviour
 {
     private MouseLook look;
-    private FirstPersonRBCharacterController characterController;
+    private PlayerMovement characterController;
     public bool IsDead { get; private set; }
 
     private void Awake()
     {
         look = GetComponent<MouseLook>();
-        characterController = GetComponent<FirstPersonRBCharacterController>();
+        characterController = GetComponent<PlayerMovement>();
     }
 
     private void OnTriggerEnter(Collider other)

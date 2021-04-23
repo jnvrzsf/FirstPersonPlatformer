@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class FirstPersonRBCharacterController : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody rb;
     private Collider col;
