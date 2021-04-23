@@ -5,7 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-    private void Awake()
+    /// <summary>
+    /// In the Start instead of the Awake, so DataManager can initialize before.
+    /// </summary>
+    private void Start()
     {
         UpdateLevelCounts();
     }

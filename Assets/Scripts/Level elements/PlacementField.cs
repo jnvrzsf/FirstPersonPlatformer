@@ -9,7 +9,7 @@ public class PlacementField : MonoBehaviour
     private float length;
     private bool cubeIsPlaced;
 
-    // separate bridge script amin meghív a drow shrink
+    // separate bridge script amin meghív a grow/shrink
 
     private void Awake()
     {
@@ -21,7 +21,7 @@ public class PlacementField : MonoBehaviour
         if (collision.gameObject.GetComponent<Pickupable>() != null)
         {
             cubeIsPlaced = true;
-            // animate down press
+            // TODO: animate down press
         }
     }
 
@@ -36,7 +36,7 @@ public class PlacementField : MonoBehaviour
     private void Update() // TODO: coroutine instead
     {
         float speed = 10f;
-        Vector3 scaleChange = new Vector3(0f, 0f, 1f) * Time.deltaTime; // direction
+        Vector3 scaleChange = new Vector3(0f, 0f, 1f) * Time.deltaTime; // get axis from inspector
 
         if (bridgeCollider.bounds.extents.z > length / 2)
         {
@@ -45,7 +45,6 @@ public class PlacementField : MonoBehaviour
 
         if (cubeIsPlaced)
         {
-            //bridge.localScale += scaleChange;
             bridge.localScale += scaleChange * speed;
             bridge.position += scaleChange * speed / 2;
         }

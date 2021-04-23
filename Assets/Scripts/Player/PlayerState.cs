@@ -19,6 +19,7 @@ public class PlayerState : MonoBehaviour
         if (other.CompareTag("DeathZone"))
         {
             IsDead = true;
+            //Time.timeScale = 0f;
             FreezePlayer();
         }
     }
@@ -28,7 +29,7 @@ public class PlayerState : MonoBehaviour
         if (other.CompareTag("DeathZone"))
         {
             IsDead = false;
-            UnfreezePlayer(); // ? what if still in trigger
+            UnfreezePlayer();
         }
     }
 
