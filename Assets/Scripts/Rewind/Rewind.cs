@@ -6,26 +6,23 @@ public class Rewind : MonoBehaviour
     private PlayerState playerState;
     private InputManager input;
     private Rewindable rewindedObject;
+    private RewindablePlayer player;
 
     private void Awake()
     {
         ray = GetComponent<RayFromCamera>();
         playerState = GetComponent<PlayerState>();
         input = FindObjectOfType<InputManager>();
+        player = GetComponent<RewindablePlayer>();
     }
 
     private void Update()
     {
         if (input.PressedRewind)
         {
-            if (input.IsPressingRun)
+            if (input.isPressingShift)
             {
-                rewindedObject = GetComponent<RewindablePlayer>();
-                // unfreeze player
-                if (playerState.IsDead)
-                {
-                    Time.timeScale = 1f;
-                }
+                rewindedObject = player;
                 rewindedObject.StartRewinding();
             }
             else

@@ -3,15 +3,18 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    private bool isPaused;
+    public bool isPaused { get; private set; }
     [SerializeField] private GameObject menu;
     [SerializeField] private GameObject popup;
+    [SerializeField] private GameObject rewindPanel;
     [SerializeField] private CursorController cursor;
+    private PlayerState player;
     private InputManager input;
 
     private void Awake()
     {
         input = FindObjectOfType<InputManager>();
+        player = FindObjectOfType<PlayerState>();
         menu.SetActive(false);
     }
 
@@ -28,17 +31,22 @@ public class PauseMenu : MonoBehaviour
                 Pause();
             } 
         }
-    }
 
-    private void PauseTime() => Time.timeScale = 0f;
-    private void ResumeTime() => Time.timeScale = 1f;
+        if (player.isDead)
+        {
+            ShowRewindPanel();
+        }
+        else
+        {
+            HideRewindPanel();
+        }
+    }
 
     private void Pause()
     {
         isPaused = true;
         cursor.Unlock();
         menu.SetActive(true);
-        PauseTime();
     }
 
     public void Resume()
@@ -46,19 +54,18 @@ public class PauseMenu : MonoBehaviour
         isPaused = false;
         menu.SetActive(false);
         cursor.Lock();
-        ResumeTime();
     }
 
     public void Restart()
     {
+        isPaused = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        ResumeTime();
     }
 
     public void LoadMainMenu()
     {
+        isPaused = false;
         SceneManager.LoadScene("MainMenu");
-        ResumeTime();
     }
 
     public void ShowPopup()
@@ -74,5 +81,15 @@ public class PauseMenu : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
+    }
+
+    private void ShowRewindPanel()
+    {
+        rewindPanel.SetActive(true);
+    }
+
+    private void HideRewindPanel()
+    {
+        rewindPanel.SetActive(false);
     }
 }

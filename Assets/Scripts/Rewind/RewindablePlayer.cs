@@ -24,15 +24,15 @@ public class RewindablePlayer : Rewindable
     {
         base.StartRewinding();
         rb.isKinematic = true;
-        playerState.FreezePlayer();
+        playerState.isRewinding = true;
     }
 
     public override void StopRewinding()
     {
         base.StopRewinding();
         rb.isKinematic = false;
+        playerState.isRewinding = false;
         ReapplyForces();
-        playerState.UnfreezePlayer();
     }
 
     private void ReapplyForces()

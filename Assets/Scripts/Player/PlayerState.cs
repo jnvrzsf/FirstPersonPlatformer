@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerState : MonoBehaviour
 {
     private MouseLook look;
     private PlayerMovement characterController;
-    public bool IsDead { get; private set; }
+    public bool isRewinding;
+    public bool isDead;
 
     private void Awake()
     {
@@ -14,22 +13,24 @@ public class PlayerState : MonoBehaviour
         characterController = GetComponent<PlayerMovement>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void Update()
     {
-        if (other.CompareTag("DeathZone"))
+        if (isRewinding)
         {
-            IsDead = true;
-            //Time.timeScale = 0f;
+            isDead = false;
             FreezePlayer();
+        }
+        else
+        {
+            UnfreezePlayer();
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("DeathZone"))
+        if (other.CompareTag("DeathZone") && !isRewinding)
         {
-            IsDead = false;
-            UnfreezePlayer();
+            isDead = true;
         }
     }
 

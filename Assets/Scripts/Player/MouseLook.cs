@@ -2,7 +2,7 @@
 
 public class MouseLook : MonoBehaviour
 {
-    [SerializeField] private Transform playerSight;
+    [SerializeField] private Transform cam;
     [SerializeField] private Transform playerOrientation;
     private InputManager input;
     private float xRotation;
@@ -26,7 +26,7 @@ public class MouseLook : MonoBehaviour
 
             xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-            playerSight.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+            cam.rotation = Quaternion.Euler(xRotation, yRotation, 0);
             playerOrientation.rotation = Quaternion.Euler(0, yRotation, 0);
         }
     }

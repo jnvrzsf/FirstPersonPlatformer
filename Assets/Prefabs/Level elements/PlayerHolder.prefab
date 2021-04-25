@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fd58af4eaa26384e9e069ef13320780, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSight: {fileID: 3507689825165289285}
+  cam: {fileID: 3507689825165289285}
   playerOrientation: {fileID: 3507689824318255921}
 --- !u!114 &1483697550
 MonoBehaviour:
@@ -166,6 +166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aea12875834d6164ba4c847b19cb7429, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isRewinding: 0
+  isDead: 0
 --- !u!114 &1483697552
 MonoBehaviour:
   m_ObjectHideFlags: 0
