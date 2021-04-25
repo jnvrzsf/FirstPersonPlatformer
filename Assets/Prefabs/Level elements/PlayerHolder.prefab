@@ -16,8 +16,8 @@ GameObject:
   - component: {fileID: 301333931955731223}
   - component: {fileID: 3176667311526769153}
   - component: {fileID: 9002088580469487711}
-  - component: {fileID: 1483697550}
   - component: {fileID: 1483697551}
+  - component: {fileID: 1483697550}
   - component: {fileID: 1483697552}
   m_Layer: 8
   m_Name: Player
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2761513944326587732}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef08a6b7dba56fc409adf3a9318b5faf, type: 3}
+  m_Script: {fileID: 11500000, guid: c26137863a8f7404aaa4bfecaca6aae6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   carryPoint: {fileID: 4125988326216334047}
@@ -142,18 +142,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 3507689825165289285}
   playerOrientation: {fileID: 3507689824318255921}
---- !u!114 &1483697550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2761513944326587732}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68f2aac35a18c024e9635fc2b677ed9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1483697551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,6 +156,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isRewinding: 0
   isDead: 0
+--- !u!114 &1483697550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2761513944326587732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6ff3569d4d669446938331d1da438a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1483697552
 MonoBehaviour:
   m_ObjectHideFlags: 0

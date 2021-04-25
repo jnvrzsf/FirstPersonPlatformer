@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Carrying : MonoBehaviour
+public class Carrier : MonoBehaviour
 {
     public Transform carryPoint;
     private InputManager input;
     private RayFromCamera ray;
     private Pickupable pickupObject;
-    private CursorController cursor;
     private PlayerMovement player;
     private PlayerTrigger playerTrigger;
 
-    private bool isCarrying => pickupObject != null;
+    public bool isCarrying => pickupObject != null;
     private float distance => Vector3.Distance(carryPoint.position, pickupObject.transform.position);
     private float maxDistance = 5f;
 
@@ -20,7 +19,6 @@ public class Carrying : MonoBehaviour
     {
         input = FindObjectOfType<InputManager>();
         ray = GetComponent<RayFromCamera>();
-        cursor = FindObjectOfType<CursorController>();
         player = GetComponent<PlayerMovement>();
         playerTrigger = GetComponentInChildren<PlayerTrigger>();
     }
@@ -74,7 +72,6 @@ public class Carrying : MonoBehaviour
                     Debug.Log("Picked up object");
                     pickupObject = p;
                     pickupObject.SetToPickedUp(this);
-                    cursor.HideOnCarry();
                     AudioManager.instance.Play(AudioType.ObjectPickUp);
                 }
             }
@@ -86,7 +83,6 @@ public class Carrying : MonoBehaviour
         Debug.Log("Dropped object");
         pickupObject.SetToDropped();
         pickupObject = null;
-        cursor.ShowOnDrop();
         AudioManager.instance.Play(AudioType.ObjectDrop);
     }
 }

@@ -3,19 +3,19 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    public bool isPaused { get; private set; }
     [SerializeField] private GameObject menu;
     [SerializeField] private GameObject popup;
     [SerializeField] private GameObject rewindPanel;
     [SerializeField] private CursorController cursor;
     private PlayerState player;
     private InputManager input;
+    public bool isPaused { get; private set; }
+    public bool isDisplaying => menu.activeSelf || rewindPanel.activeSelf;
 
     private void Awake()
     {
         input = FindObjectOfType<InputManager>();
         player = FindObjectOfType<PlayerState>();
-        menu.SetActive(false);
     }
 
     private void Update()
@@ -45,8 +45,8 @@ public class PauseMenu : MonoBehaviour
     private void Pause()
     {
         isPaused = true;
-        cursor.Unlock();
         menu.SetActive(true);
+        cursor.Unlock();
     }
 
     public void Resume()

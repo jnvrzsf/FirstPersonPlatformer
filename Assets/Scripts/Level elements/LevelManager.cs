@@ -5,14 +5,20 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
+    [SerializeField] string nextSceneName;
+
     /// <summary>
-    /// In the Start instead of the Awake, so DataManager can initialize before.
+    /// In Start, so DataManager can initialize before in Awake.
     /// </summary>
     private void Start()
     {
         UpdateLevelCounts();
     }
 
+    /// <summary>
+    /// Updates the current level and the highest reached level number 
+    /// if needed from the current scene's name.
+    /// </summary>
     private void UpdateLevelCounts()
     {
         string currentSceneName = SceneManager.GetActiveScene().name;
@@ -25,8 +31,12 @@ public class LevelManager : MonoBehaviour
         DataManager.instance.SetCurrentLevel(currentLevelNumber);
     }
 
+    /// <summary>
+    /// Loads the given next level.
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(nextSceneName);
     }
 }

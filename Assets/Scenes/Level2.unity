@@ -253,6 +253,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1947554439}
     m_Modifications:
+    - target: {fileID: -7705648010864801613, guid: 91a67daa500558e4594a961d7542accb,
+        type: 3}
+      propertyPath: nextSceneName
+      value: Level3
+      objectReference: {fileID: 0}
     - target: {fileID: 7549619877572250721, guid: 91a67daa500558e4594a961d7542accb,
         type: 3}
       propertyPath: m_Mesh
@@ -1012,7 +1017,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-182694
+  m_Name: pb_Mesh-182414
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1323,7 +1328,7 @@ PrefabInstance:
     - target: {fileID: 3507689825430693371, guid: dd86db208e162104da80bcabdd771af2,
         type: 3}
       propertyPath: m_Name
-      value: RBPlayer
+      value: PlayerHolder
       objectReference: {fileID: 0}
     - target: {fileID: 3507689825430693372, guid: dd86db208e162104da80bcabdd771af2,
         type: 3}

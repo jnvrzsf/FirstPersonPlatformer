@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
 
-public class Rewind : MonoBehaviour
+public class Rewinder : MonoBehaviour
 {
     private RayFromCamera ray;
-    private PlayerState playerState;
     private InputManager input;
     private Rewindable rewindedObject;
     private RewindablePlayer player;
+    public bool isRewinding => rewindedObject != null;
 
     private void Awake()
     {
         ray = GetComponent<RayFromCamera>();
-        playerState = GetComponent<PlayerState>();
         input = FindObjectOfType<InputManager>();
         player = GetComponent<RewindablePlayer>();
     }
@@ -38,7 +37,7 @@ public class Rewind : MonoBehaviour
                 }
             }
         }
-        if (input.ReleasedRewind && rewindedObject != null)
+        if (input.ReleasedRewind && isRewinding)
         {
             rewindedObject.StopRewinding();
             rewindedObject = null;
