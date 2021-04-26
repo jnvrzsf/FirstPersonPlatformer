@@ -8,12 +8,12 @@ public abstract class Pickupable : MonoBehaviour
     protected Rigidbody rb;
     private Collider col;
     private Renderer rend;
-    protected Carrying carrier;
+    protected Carrier carrier;
     [HideInInspector] public SpawnButton spawner;
-    public bool canBePickedUp { get; set; } = true; // TODO: figure out why i have to set i like this
+    public bool canBePickedUp { get; private set; } = true;
     protected bool isCarried => carrier != null;
-    protected float minSpeed = 0;
-    protected float maxSpeed = 8000;
+    private float minSpeed = 0;
+    private float maxSpeed = 10000;
 
     [SerializeField] private Material dissolveMat;
     private bool isDissolving;
@@ -33,7 +33,7 @@ public abstract class Pickupable : MonoBehaviour
         float speed = Mathf.SmoothStep(minSpeed, maxSpeed, distance / maxDistance) * Time.fixedDeltaTime;
         rb.velocity = direction * speed;
     }
-    public abstract void SetToPickedUp(Carrying c);
+    public abstract void SetToPickedUp(Carrier c);
     public abstract void SetToDropped();
     public virtual void SetToUntouchable() {
         carrier?.Drop();

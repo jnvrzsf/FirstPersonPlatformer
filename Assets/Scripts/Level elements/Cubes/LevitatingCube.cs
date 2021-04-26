@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LevitatingCube : Pickupable
 {
-    public override void SetToPickedUp(Carrying c)
+    public override void SetToPickedUp(Carrier c)
     {
         carrier = c;
         rb.isKinematic = false;
