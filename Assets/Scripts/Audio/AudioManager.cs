@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class AudioManager : MonoBehaviour
 {
@@ -21,10 +21,10 @@ public class AudioManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        foreach (AudioObject sound in sounds)
+        foreach (AudioObject audio in sounds)
         {
-            sound.source = gameObject.AddComponent<AudioSource>();
-            sound.InitAudioSource();
+            audio.source = gameObject.AddComponent<AudioSource>();
+            audio.InitAudioSource();
         }
     }
     
@@ -37,22 +37,33 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void Play(AudioType name, Vector3 position)
+    public void PlayOnGameObject(AudioType name, GameObject gameObject)
     {
+        AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
         AudioObject audio = GetAudioObject(name);
         if (audio != null)
         {
-            AudioSource.PlayClipAtPoint(audio.source.clip, position);
+            newAudioSource.PlayOneShot(audio.source.clip);
         }
     }
 
     private AudioObject GetAudioObject(AudioType name)
     {
-        AudioObject sound = Array.Find(sounds, s => s.name == name);
-        if (sound == null)
+        AudioObject audio = Array.Find(sounds, a => a.name == name);
+        if (audio == null)
         {
             Debug.LogWarning($"Audio \"{name}\" not found.");
         }
-        return sound;
+        return audio;
+    }
+
+    public AudioClip GetAudioClip(AudioType name)
+    {
+        AudioObject audio = Array.Find(sounds, a => a.name == name);
+        if (audio == null)
+        {
+            Debug.LogWarning($"Audio \"{name}\" not found.");
+        }
+        return audio.clip;
     }
 }

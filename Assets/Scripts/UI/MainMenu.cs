@@ -10,6 +10,8 @@ public class MainMenu : MonoBehaviour
 
     private void Awake()
     {
+        UnlockCursor();
+
         if (DataManager.instance.GetCurrentLevel() == 0)
         {
             playText.text = "Play";
@@ -18,6 +20,15 @@ public class MainMenu : MonoBehaviour
         {
             playText.text = "Continue";
         }
+    }
+
+    /// <summary>
+    /// Shows cursor in case it was locked and hidden in a previous scene.
+    /// </summary>
+    private void UnlockCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void Play()

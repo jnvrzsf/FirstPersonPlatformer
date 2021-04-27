@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class AudioObject // use SO?
+public class AudioObject
 {
     public AudioType name;
     public AudioClip clip;

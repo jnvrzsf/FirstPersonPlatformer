@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
 public abstract class Pickupable : MonoBehaviour
@@ -10,20 +8,19 @@ public abstract class Pickupable : MonoBehaviour
     private Renderer rend;
     protected Carrier carrier;
     [HideInInspector] public SpawnButton spawner;
+    [SerializeField] private Material dissolveMat;
+    [HideInInspector] public AudioSource audioSource;
     public bool canBePickedUp { get; private set; } = true;
     protected bool isCarried => carrier != null;
     private float minSpeed = 0;
     private float maxSpeed = 10000;
-
-    [SerializeField] private Material dissolveMat;
-    private bool isDissolving;
-    private const float dissolveSpeed = 1f;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
         rend = GetComponent<Renderer>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void FollowCarrier(float maxDistance)
@@ -51,32 +48,25 @@ public abstract class Pickupable : MonoBehaviour
 
     public void Destroy()
     {
-        isDissolving = true;
         SetToUntouchable();
         rb.useGravity = false;
         Destroy(col);
+        AudioManager.instance.PlayOnGameObject(AudioType.CubeDissolve, gameObject);
         rend.material = dissolveMat;
-        AudioManager.instance.Play(AudioType.CubeDissolve, transform.position); // TODO: play on audiosource attached to gameobject
+        StartCoroutine(Dissolve());
     }
 
-    private void Update() // TODO: coroutine instead
+    private IEnumerator Dissolve()
     {
-        if (isDissolving)
+        float seconds = AudioManager.instance.GetAudioClip(AudioType.CubeDissolve).length;
+        float percentage = 0f;
+        while (percentage < 1f)
         {
-            Dissolve();
+            percentage += Time.deltaTime / seconds;
+            rend.material.SetFloat("DissolvePercentage", percentage);
+            Debug.Log(rend.material.GetFloat("DissolvePercentage"));
+            yield return null;
         }
-    }
-
-    private void Dissolve()
-    {
-        float dissolvePercentage = rend.material.GetFloat("DissolvePercentage");
-        if (dissolvePercentage < 1f)
-        {
-            rend.material.SetFloat("DissolvePercentage", Mathf.MoveTowards(dissolvePercentage, 1f, dissolveSpeed * Time.deltaTime));
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
 }

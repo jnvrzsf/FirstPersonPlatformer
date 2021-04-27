@@ -62,7 +62,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - DissolvePercentage: 0
+    - DissolvePercentage: 1
     - Vector1_5BB4D589: 0.02
     - Vector1_66C613A9: 30
     - _AlphaClip: 0

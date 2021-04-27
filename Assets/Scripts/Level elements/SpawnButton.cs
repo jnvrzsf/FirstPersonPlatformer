@@ -8,7 +8,6 @@ public class SpawnButton : MonoBehaviour
     private Pickupable cube;
     private bool canBePressed = true;
     private Vector3 originalPosition;
-    private Coroutine coroutine;
 
     private const float secondsBetweenPresses = 2f;
     private const float buttonDip = 0.05f;
@@ -36,7 +35,7 @@ public class SpawnButton : MonoBehaviour
     {
         cube?.Destroy();
         transform.position = new Vector3(transform.position.x, transform.position.y - buttonDip, transform.position.z);
-        coroutine = StartCoroutine(RestoreButton(secondsBetweenPresses));
+        StartCoroutine(RestoreButton(secondsBetweenPresses));
         SpawnNewCube();
     }
 
@@ -44,7 +43,7 @@ public class SpawnButton : MonoBehaviour
     {
         cube = Instantiate(cubePrefab, SpawnPoint.position, Quaternion.identity).GetComponent<Pickupable>();
         cube.spawner = this;
-        AudioManager.instance.Play(AudioType.CubeSpawn, SpawnPoint.position);
+        AudioManager.instance.PlayOnGameObject(AudioType.CubeSpawn, cube.gameObject);
     }
 
     private IEnumerator RestoreButton(float seconds)

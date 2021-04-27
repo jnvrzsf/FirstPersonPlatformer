@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -70,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
                 transform.SetParent(null);
             }
 
-            horizontalDirection = (orientation.transform.forward * input.Vertical + orientation.transform.right * input.Horizontal).normalized;
+            horizontalDirection = (orientation.forward * input.Vertical + orientation.right * input.Horizontal).normalized;
             projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, raycastHit.normal).normalized;
 
             x = 0;
@@ -139,15 +137,15 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (hit.distance < smallGroundOffset)
                 {
-                    if (hit.collider.gameObject.layer == 10)
+                    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Pickupable"))
                     {
                         pickupables.Add(hit.collider.gameObject);
                     }
 
-                    if (hit.collider.CompareTag("RideableObject"))
+                    if (hit.collider.CompareTag("Rideable"))
                     {
                         isOnRideableObject = true;
-                        rideableObjectUnderPlayer = hit.collider.gameObject.transform; // ? hit.transform
+                        rideableObjectUnderPlayer = hit.transform;
                     }
                 }
             }

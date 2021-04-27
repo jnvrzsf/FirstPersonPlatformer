@@ -6,9 +6,7 @@ TagManager:
   tags:
   - DestructiveField
   - DeathZone
-  - RideableObject
-  - MovingObject
-  - Ground
+  - Rideable
   layers:
   - Default
   - TransparentFX
@@ -20,8 +18,8 @@ TagManager:
   - 
   - Player
   - Ground
-  - PickupableObject
-  - PickedUpObject
+  - Pickupable
+  - PickedUp
   - 
   - 
   - 

@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class DataManager : MonoBehaviour
 {
     public static DataManager instance { get; private set; }
     private GameState gameState;
-
     private string path;
-
     public bool isGameStateSaved => File.Exists(path);
+
     private void Awake()
-       {
+    {
+        path = Application.persistentDataPath + "/GameState.json";
+
         if (instance == null)
         {
             instance = this;
@@ -25,8 +25,6 @@ public class DataManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
-
-        path = Application.persistentDataPath + "/GameState.json"; // can only set this here
 
         if (isGameStateSaved)
         {

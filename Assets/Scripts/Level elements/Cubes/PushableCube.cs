@@ -76,7 +76,7 @@ public class PushableCube : MonoBehaviour
     /// <param name="collision"></param>
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             rb.constraints = RigidbodyConstraints.FreezeRotation;
         }

@@ -268,7 +268,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3507689825430693372}
   m_Layer: 0
-  m_Name: PlayerHolder
+  m_Name: PlayerParts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -495,7 +495,7 @@ GameObject:
   - component: {fileID: 1251732651366041353}
   - component: {fileID: 1499113914}
   m_Layer: 0
-  m_Name: TriggerCollider
+  m_Name: NonPlayerTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

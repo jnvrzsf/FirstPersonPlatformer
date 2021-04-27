@@ -9,7 +9,7 @@ public class Carrier : MonoBehaviour
     private RayFromCamera ray;
     private Pickupable pickupObject;
     private PlayerMovement player;
-    private PlayerTrigger playerTrigger;
+    private NonPlayerTrigger playerTrigger;
 
     public bool isCarrying => pickupObject != null;
     private float distance => Vector3.Distance(carryPoint.position, pickupObject.transform.position);
@@ -20,7 +20,7 @@ public class Carrier : MonoBehaviour
         input = FindObjectOfType<InputManager>();
         ray = GetComponent<RayFromCamera>();
         player = GetComponent<PlayerMovement>();
-        playerTrigger = GetComponentInChildren<PlayerTrigger>();
+        playerTrigger = GetComponentInChildren<NonPlayerTrigger>();
     }
 
     private void Update()

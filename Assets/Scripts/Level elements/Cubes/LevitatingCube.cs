@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class LevitatingCube : Pickupable
 {
@@ -8,13 +6,13 @@ public class LevitatingCube : Pickupable
     {
         carrier = c;
         rb.isKinematic = false;
-        gameObject.layer = 11;
+        gameObject.layer = LayerMask.NameToLayer("PickedUp");
     }
 
     public override void SetToDropped()
     {
         carrier = null;
         rb.isKinematic = true;
-        gameObject.layer = 10;
+        gameObject.layer = LayerMask.NameToLayer("Pickupable");
     }
 }
