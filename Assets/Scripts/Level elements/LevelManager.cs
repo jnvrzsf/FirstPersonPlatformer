@@ -13,6 +13,7 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         UpdateLevelCounts();
+        AudioManager.instance.Play(AudioType.LevelStart);
     }
 
     /// <summary>
@@ -32,11 +33,14 @@ public class LevelManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Loads the given next level.
+    /// Loads the next level if the player reached the end of the current level.
     /// </summary>
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        SceneManager.LoadScene(nextSceneName);
+        if (other.CompareTag("Player"))
+        {
+            SceneManager.LoadScene(nextSceneName);
+        }
     }
 }

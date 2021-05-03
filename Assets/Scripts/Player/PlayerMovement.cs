@@ -17,23 +17,26 @@ public class PlayerMovement : MonoBehaviour
     private LayerMask groundMask;
     private RaycastHit raycastHit;
     private RaycastHit[] sphereCastHits;
+    private bool isGrounded; // for playing footsteps
     private bool canJump;
     private bool jump;
     private bool isOnSlope;
     private bool isSlopeTooSteep;
     [HideInInspector]
     public List<GameObject> pickupablesUnderPlayer;
-    private bool isOnRideableObject;
-    private Transform rideableObjectUnderPlayer;
+    private bool isOnMovingObject;
+    private Transform movingObjectUnderPlayer;
     private const float walkSpeed = 5f;
     private const float jumpForce = 9.5f;
     private const float largeGroundOffset = 0.8f; // can we jump
-    private const float smallGroundOffset = 0.2f; // are we on a slope, are we standing on a cube
+    private const float smallGroundOffset = 0.2f; // are we on a slope, are we standing on a cube, are we grounded
     private const float maxSlopeAngle = 45;
 
     private bool isFrozen;
     public void Freeze() => isFrozen = true;
     public void Unfreeze() => isFrozen = false;
+
+    private AudioSource stepAudio;
 
     void Awake()
     {
@@ -50,6 +53,11 @@ public class PlayerMovement : MonoBehaviour
             {
                 jump = true;
             }
+
+            if (isGrounded && !input.IsIdle)
+            {
+                AudioManager.instance.PlayWalkingSound();
+            }
         }
     }
 
@@ -59,9 +67,9 @@ public class PlayerMovement : MonoBehaviour
         {
             CheckGround();
 
-            if (isOnRideableObject)
+            if (isOnMovingObject)
             {
-                transform.SetParent(rideableObjectUnderPlayer);
+                transform.SetParent(movingObjectUnderPlayer);
             }
             else
             {
@@ -114,6 +122,11 @@ public class PlayerMovement : MonoBehaviour
             if (jump && canJump)
             {
                 y = jumpForce;
+                if (!isGrounded)
+                {
+                    AudioManager.instance.Play(AudioType.Landing);
+                }
+                AudioManager.instance.Play(AudioType.Jump);
             }
             jump = false;
 
@@ -128,25 +141,37 @@ public class PlayerMovement : MonoBehaviour
         Vector3 position = new Vector3(transform.position.x, transform.position.y - col.bounds.extents.y + col.bounds.extents.x, transform.position.z);
         sphereCastHits = Physics.SphereCastAll(position, radius, Vector3.down, largeGroundOffset, groundMask, QueryTriggerInteraction.Ignore);
 
-        isOnRideableObject = false;
+        isOnMovingObject = false;
         List<GameObject> pickupables = new List<GameObject>();
         if (sphereCastHits.Length > 0)
         {
-            canJump = true;
             foreach (RaycastHit hit in sphereCastHits)
             {
+                canJump = true;
+
                 if (hit.distance < smallGroundOffset)
                 {
+                    if (isGrounded == false)
+                    {
+                        // landing
+                        AudioManager.instance.Play(AudioType.Landing);
+                    }
+                    isGrounded = true;
+
                     if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Pickupable"))
                     {
                         pickupables.Add(hit.collider.gameObject);
                     }
 
-                    if (hit.collider.CompareTag("Rideable"))
+                    if (hit.collider.CompareTag("Moving"))
                     {
-                        isOnRideableObject = true;
-                        rideableObjectUnderPlayer = hit.transform;
+                        isOnMovingObject = true;
+                        movingObjectUnderPlayer = hit.transform;
                     }
+                }
+                else
+                {
+                    isGrounded = false;
                 }
             }
         }

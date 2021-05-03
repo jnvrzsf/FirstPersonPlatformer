@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5087474799160498063}
   m_Layer: 10
   m_Name: PhysicsCube
-  m_TagString: Untagged
+  m_TagString: Moving
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -125,3 +125,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawner: {fileID: 0}
   dissolveMat: {fileID: 2100000, guid: 7fc3da90a2329c3468faeddd6c1d7be5, type: 2}
+  audioSource: {fileID: 0}

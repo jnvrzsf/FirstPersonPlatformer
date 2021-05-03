@@ -1,6 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private LevelSelection levels;
     [SerializeField] private TMP_Text playText;
 
-    private void Awake()
+    private void Start()
     {
         UnlockCursor();
 
@@ -31,10 +32,12 @@ public class MainMenu : MonoBehaviour
         Cursor.visible = true;
     }
 
-    public void Play()
+    public void OnPlayButtonClick()
     {
-        string levelName = "Level" + DataManager.instance.GetHighestLevel().ToString();
-        LoadLevel(levelName);
+        int currentLevel = DataManager.instance.GetCurrentLevel();
+        int levelToLoad = currentLevel == 0 ? 1 : currentLevel;
+        string levelName = "Level" + levelToLoad.ToString();
+        SceneManager.LoadScene(levelName);
     }
 
     public void OnLevelsButtonClick()
@@ -60,7 +63,7 @@ public class MainMenu : MonoBehaviour
         levels.gameObject.SetActive(false);
     }
 
-    public void LoadLevel(string levelName)
+    public void OnLevelButtonClick(string levelName)
     {
         SceneManager.LoadScene(levelName);
     }
@@ -75,8 +78,18 @@ public class MainMenu : MonoBehaviour
         popup.SetActive(false);
     }
 
-    public void Quit()
+    public void OnQuitButtonClick()
     {
         Application.Quit();
+    }
+
+    public void PlayClickSound() => AudioManager.instance.PlayOneShot(AudioType.Click);
+
+    public void PlayHoverSound(Button b)
+    {
+        if (b.IsInteractable())
+        {
+            AudioManager.instance.PlayOneShot(AudioType.Hover);
+        }
     }
 }

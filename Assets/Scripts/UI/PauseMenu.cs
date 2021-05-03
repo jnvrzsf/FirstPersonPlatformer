@@ -44,6 +44,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Pause()
     {
+        AudioManager.instance.PlayOneShot(AudioType.Pause);
         isPaused = true;
         menu.SetActive(true);
         cursor.Unlock();
@@ -71,6 +72,7 @@ public class PauseMenu : MonoBehaviour
     public void ShowPopup()
     {
         popup.SetActive(true);
+        AudioManager.instance.PlayOneShot(AudioType.Popup);
     }
 
     public void HidePopup()
@@ -92,4 +94,7 @@ public class PauseMenu : MonoBehaviour
     {
         rewindPanel.SetActive(false);
     }
+
+    public void OnPointerEnter() => AudioManager.instance.PlayOneShot(AudioType.Hover);
+    public void OnPointerClick() =>  AudioManager.instance.PlayOneShot(AudioType.Click);
 }

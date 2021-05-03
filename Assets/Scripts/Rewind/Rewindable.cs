@@ -1,12 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public abstract class Rewindable : MonoBehaviour
 {
     protected bool isRewinding;
-    protected float recordTimeInSeconds = 10f;
+    protected float recordTimeInSeconds = 15f;
     protected float maximumCount => Mathf.Round(recordTimeInSeconds / Time.fixedDeltaTime);
+
+    public event Action OutOfRecords;
+    protected void OnOutOfRecords() => OutOfRecords?.Invoke();
 
     protected abstract void Awake();
 

@@ -1,17 +1,28 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
-    public AudioObject[] sounds;
+    [SerializeField] private AudioObject[] sounds; // for serialization
+    private Dictionary<AudioType, AudioObject> audioObjects; // for faster lookup
 
-    void Awake()
+    [SerializeField] private AudioClip[] footstepClips;
+    private AudioSource footstepsSource;
+    private int lastPlayedIndex;
+    private float lastPlayedTime;
+    private const float footstepsVolume = 0.8f;
+    private const float delayBetweenSteps = 0.4f;
+
+    private TimeManager timeManager;
+
+    private void Awake()
     {
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -19,51 +30,191 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        DontDestroyOnLoad(gameObject);
+        InitDictionary();
 
+        footstepsSource = gameObject.AddComponent<AudioSource>();
+        footstepsSource.volume = footstepsVolume;
+    }
+
+    private void InitDictionary()
+    {
+        audioObjects = new Dictionary<AudioType, AudioObject>();
         foreach (AudioObject audio in sounds)
         {
-            audio.source = gameObject.AddComponent<AudioSource>();
-            audio.InitAudioSource();
+            if (!audio.settings.is3DSound)
+            {
+                audio.InitAudioSource(gameObject);
+            }
+            audioObjects.Add(audio.name, audio);
         }
     }
-    
-    public void Play(AudioType name)
+
+    public bool TryGetAudioObject(AudioType audioName, out AudioObject audioObject)
     {
-        AudioObject audio = GetAudioObject(name);
-        if (audio != null)
+        AudioObject existingAudio;
+        audioObject = null;
+        if (audioObjects.TryGetValue(audioName, out existingAudio))
+        {
+            audioObject = existingAudio;
+            return true;
+        }
+        else
+        {
+            Debug.LogWarning($"Audio \"{audioName}\" not found.");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Eg. for looping audio, for audio that doesnt rapidly fires.
+    /// <summary>
+    /// <param name="audioName"></param>
+    public void Play(AudioType audioName)
+    {
+        AudioObject audio;
+        if (TryGetAudioObject(audioName, out audio))
+        {
+            audio.source.Play();
+        }
+    }
+
+    /// <summary>
+    /// Eg. for audio that should not be interrupted by playing it again.
+    /// </summary>
+    /// <param name="audioName"></param>
+    public void PlayOneShot(AudioType audioName)
+    {
+        AudioObject audio;
+        if (TryGetAudioObject(audioName, out audio))
         {
             audio.source.PlayOneShot(audio.source.clip);
         }
     }
 
-    public void PlayOnGameObject(AudioType name, GameObject gameObject)
+    /// <summary>
+    /// Plays a clip at a point in world space.
+    /// </summary>
+    /// <param name="audioName"></param>
+    /// <param name="point"></param>
+    public void PlayAtPoint(AudioType audioName, Vector3 point)
     {
-        AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
-        AudioObject audio = GetAudioObject(name);
-        if (audio != null)
+        AudioObject audio;
+        if (TryGetAudioObject(audioName, out audio))
         {
-            newAudioSource.PlayOneShot(audio.source.clip);
+            AudioSource.PlayClipAtPoint(audio.settings.clip, point);
         }
     }
 
-    private AudioObject GetAudioObject(AudioType name)
+    /// <summary>
+    /// For 3D sounds. Requesting script can decide whether to use 
+    /// eg. Play or PlayOneShot on the AudioSource.
+    /// </summary>
+    /// <param name="audioName"></param>
+    /// <param name="gameObject"></param>
+    /// <returns></returns>
+    public AudioObject AddAudioToGameObject(AudioType audioName, GameObject gameObject)
     {
-        AudioObject audio = Array.Find(sounds, a => a.name == name);
-        if (audio == null)
+        AudioObject originalAudio;
+        AudioObject newAudio = null; // new empty?
+        if (TryGetAudioObject(audioName, out originalAudio))
         {
-            Debug.LogWarning($"Audio \"{name}\" not found.");
+            newAudio = new AudioObject(originalAudio, gameObject);
         }
-        return audio;
+        return newAudio;
     }
 
-    public AudioClip GetAudioClip(AudioType name)
+    /// <summary>
+    /// For 3D sounds. Adds a new AudioSource to the gameobject, plays its clip, 
+    /// and returns the AudioObject so the requesting script can have control over the play.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="gameObject"></param>
+    public AudioObject PlayOnGameObject(AudioType audioName, GameObject gameObject)
     {
-        AudioObject audio = Array.Find(sounds, a => a.name == name);
-        if (audio == null)
+        AudioObject newAudio = AddAudioToGameObject(audioName, gameObject);
+        newAudio.source.Play();
+        return newAudio;
+    }
+
+    public void PlayWalkingSound()
+    {
+        if (!footstepsSource.isPlaying && Time.time > lastPlayedTime + delayBetweenSteps)
         {
-            Debug.LogWarning($"Audio \"{name}\" not found.");
+            int index = Random.Range(0, footstepClips.Length - 1);
+            while (index == lastPlayedIndex)
+            {
+                index = Random.Range(0, footstepClips.Length - 1);
+            }
+            footstepsSource.PlayOneShot(footstepClips[index]);
+            lastPlayedTime = Time.time;
+            lastPlayedIndex = index;
         }
-        return audio.clip;
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    /// <summary>
+    /// Stops AudioSources from playing.
+    /// Unsubscribes from old, resubscribes to new on scene change.
+    /// </summary>
+    /// <param name="scene"></param>
+    /// <param name="mode"></param>
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        StopAllSounds();
+        UnsubscribeFromTimeChanges();
+        SubScribeToTimeChanges();
+    }
+
+    private void OnDestroy()
+    {
+        UnsubscribeFromTimeChanges();
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void SubScribeToTimeChanges()
+    {
+        timeManager = FindObjectOfType<TimeManager>();
+        if (timeManager)
+        {
+            timeManager.TimePaused += PauseInGameSounds;
+            timeManager.TimeResumed += ResumeInGameSounds;
+        }
+    }
+
+    private void UnsubscribeFromTimeChanges()
+    {
+        if (timeManager)
+        {
+            timeManager.TimePaused -= PauseInGameSounds;
+            timeManager.TimeResumed -= ResumeInGameSounds;
+        }
+    }
+
+    private void PauseInGameSounds()
+    {
+        AudioListener.pause = true;
+    }
+
+    private void ResumeInGameSounds()
+    {
+        AudioListener.pause = false;
+    }
+
+    /// <summary>
+    /// On scene changes, stops all playing sounds on this gameobject, as it can persist between scenes.
+    /// </summary>
+    private void StopAllSounds()
+    {
+        foreach (AudioObject audio in audioObjects.Values)
+        {
+            if (audio.source != null)
+            {
+                audio.source.Stop();
+            }
+        }
     }
 }

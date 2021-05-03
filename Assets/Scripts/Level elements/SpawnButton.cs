@@ -12,9 +12,14 @@ public class SpawnButton : MonoBehaviour
     private const float secondsBetweenPresses = 2f;
     private const float buttonDip = 0.05f;
 
+    private AudioObject successSound;
+    private AudioObject failSound;
+
     private void Start()
     {
         originalPosition = transform.position;
+        successSound = AudioManager.instance.AddAudioToGameObject(AudioType.ButtonPressSuccess, gameObject);
+        failSound = AudioManager.instance.AddAudioToGameObject(AudioType.ButtonPressFail, gameObject);
         SpawnNewCube();
     }
 
@@ -23,11 +28,11 @@ public class SpawnButton : MonoBehaviour
         if (canBePressed)
         {
             Press();
-            AudioManager.instance.Play(AudioType.ButtonPressSuccess);
+            successSound.source.Play();
         }
         else
         {
-            AudioManager.instance.Play(AudioType.ButtonPressFail);
+            failSound.source.PlayOneShot(failSound.source.clip);
         }
     }
 
@@ -37,13 +42,13 @@ public class SpawnButton : MonoBehaviour
         transform.position = new Vector3(transform.position.x, transform.position.y - buttonDip, transform.position.z);
         StartCoroutine(RestoreButton(secondsBetweenPresses));
         SpawnNewCube();
+        AudioManager.instance.PlayOnGameObject(AudioType.CubeSpawn, gameObject);
     }
 
     public void SpawnNewCube()
     {
         cube = Instantiate(cubePrefab, SpawnPoint.position, Quaternion.identity).GetComponent<Pickupable>();
         cube.spawner = this;
-        AudioManager.instance.PlayOnGameObject(AudioType.CubeSpawn, cube.gameObject);
     }
 
     private IEnumerator RestoreButton(float seconds)

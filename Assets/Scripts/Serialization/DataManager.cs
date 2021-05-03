@@ -12,11 +12,10 @@ public class DataManager : MonoBehaviour
 
     private void Awake()
     {
-        path = Application.persistentDataPath + "/GameState.json";
-
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -24,8 +23,7 @@ public class DataManager : MonoBehaviour
             return;
         }
 
-        DontDestroyOnLoad(gameObject);
-
+        path = Application.persistentDataPath + "/GameState.json";
         if (isGameStateSaved)
         {
             LoadGameState();

@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public enum AudioType
+﻿public enum AudioType
 {
     ObjectPickUp,
     ObjectDrop,
@@ -10,4 +6,13 @@ public enum AudioType
     CubeDissolve,
     ButtonPressSuccess,
     ButtonPressFail,
+    Rewind,
+    LevelStart,
+    Popup,
+    Hover,
+    Click,
+    Landing,
+    Jump,
+    Pause,
+    Collision
 }

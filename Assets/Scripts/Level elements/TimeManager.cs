@@ -1,11 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
     private PauseMenu menu;
     private PlayerState player;
     private bool isPlayerDead => player.isDead;
-    private bool isGamePaused => menu.isPaused;
+    public bool isGamePaused => menu.isPaused;
+
+    private bool isTimePaused;
+    public event Action TimePaused;
+    public event Action TimeResumed;
 
     private void Awake()
     {
@@ -17,11 +22,15 @@ public class TimeManager : MonoBehaviour
     {
         if (!isPlayerDead && !isGamePaused)
         {
-            Time.timeScale = 1f;
+            if (isTimePaused) TimeResumed?.Invoke();
+            isTimePaused = false;
         }
         else
         {
-            Time.timeScale = 0f;
+            if (!isTimePaused) TimePaused?.Invoke();
+            isTimePaused = true;
         }
+
+        Time.timeScale = isTimePaused ? 0f : 1f;
     }
 }

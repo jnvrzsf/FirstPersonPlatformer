@@ -14,9 +14,10 @@ GameObject:
   - component: {fileID: 5087474799160498056}
   - component: {fileID: 7914606444912997126}
   - component: {fileID: 5087474799160498063}
+  - component: {fileID: 6644435205812860379}
   m_Layer: 10
   m_Name: GravityCube
-  m_TagString: Untagged
+  m_TagString: Moving
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -126,3 +127,15 @@ MonoBehaviour:
   spawner: {fileID: 0}
   dissolveMat: {fileID: 2100000, guid: b1b7fd9f298a5a64a8aa9885c68fe4f6, type: 2}
   audioSource: {fileID: 0}
+--- !u!114 &6644435205812860379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5087474799160498062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d198b39adbc2ca5488276f0be7db44f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

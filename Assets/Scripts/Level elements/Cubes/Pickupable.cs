@@ -9,18 +9,17 @@ public abstract class Pickupable : MonoBehaviour
     protected Carrier carrier;
     [HideInInspector] public SpawnButton spawner;
     [SerializeField] private Material dissolveMat;
-    [HideInInspector] public AudioSource audioSource;
     public bool canBePickedUp { get; private set; } = true;
     protected bool isCarried => carrier != null;
     private float minSpeed = 0;
     private float maxSpeed = 10000;
+    private AudioObject dissolveAudio;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
         rend = GetComponent<Renderer>();
-        audioSource = GetComponent<AudioSource>();
     }
 
     public void FollowCarrier(float maxDistance)
@@ -46,25 +45,32 @@ public abstract class Pickupable : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (!collision.gameObject.CompareTag("Player"))
+        {
+            AudioManager.instance.PlayAtPoint(AudioType.Collision, collision.GetContact(0).point);
+        }
+    }
+
     public void Destroy()
     {
         SetToUntouchable();
         rb.useGravity = false;
         Destroy(col);
-        AudioManager.instance.PlayOnGameObject(AudioType.CubeDissolve, gameObject);
+        dissolveAudio = AudioManager.instance.PlayOnGameObject(AudioType.CubeDissolve, gameObject);
         rend.material = dissolveMat;
         StartCoroutine(Dissolve());
     }
 
     private IEnumerator Dissolve()
     {
-        float seconds = AudioManager.instance.GetAudioClip(AudioType.CubeDissolve).length;
+        float seconds = dissolveAudio.source.clip.length;
         float percentage = 0f;
         while (percentage < 1f)
         {
             percentage += Time.deltaTime / seconds;
             rend.material.SetFloat("DissolvePercentage", percentage);
-            Debug.Log(rend.material.GetFloat("DissolvePercentage"));
             yield return null;
         }
         Destroy(gameObject);

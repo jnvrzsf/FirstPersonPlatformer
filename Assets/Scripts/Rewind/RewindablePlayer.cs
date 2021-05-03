@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,12 +38,9 @@ public class RewindablePlayer : Rewindable
 
     private void ReapplyForces()
     {
-        if (bodyRecords.Count > 0)
-        {
-            RBRecord record = bodyRecords.First.Value;
-            rb.velocity = record.Velocity;
-            rb.angularVelocity = record.AngularVelocity;
-        }
+        RBRecord record = bodyRecords.First.Value;
+        rb.velocity = record.Velocity;
+        rb.angularVelocity = record.AngularVelocity;
     }
 
     protected override void Record()
@@ -58,7 +56,7 @@ public class RewindablePlayer : Rewindable
 
     protected override void Rewind()
     {
-        if (bodyRecords.Count > 0 && cameraRecords.Count > 0)
+        if (bodyRecords.Count > 1 && cameraRecords.Count > 1)
         {
             RBRecord record = bodyRecords.First.Value;
             transform.position = record.Position;
@@ -67,6 +65,10 @@ public class RewindablePlayer : Rewindable
 
             cam.rotation = cameraRecords.First.Value;
             cameraRecords.RemoveFirst();
+        }
+        else
+        {
+            OnOutOfRecords();
         }
     }
 }

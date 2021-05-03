@@ -23,19 +23,19 @@ public class RewindableRB : Rewindable
     public override void StopRewinding()
     {
         base.StopRewinding();
-        rb.isKinematic = false;
-        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        if (GetComponent<LevitatingCube>() == null)
+        {
+            rb.isKinematic = false;
+            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        }
         ReapplyForces();
     }
 
     private void ReapplyForces()
     {
-        if (records.Count > 0)
-        {
-            RBRecord record = records.First.Value;
-            rb.velocity = record.Velocity;
-            rb.angularVelocity = record.AngularVelocity;
-        }
+        RBRecord record = records.First.Value;
+        rb.velocity = record.Velocity;
+        rb.angularVelocity = record.AngularVelocity;
     }
 
     protected override void Record()
@@ -49,14 +49,16 @@ public class RewindableRB : Rewindable
 
     protected override void Rewind()
     {
-        if (records.Count > 0)
+        if (records.Count > 1)
         {
             RBRecord record = records.First.Value;
             transform.position = record.Position;
             transform.rotation = record.Rotation;
-            rb.velocity = record.Velocity;
-            rb.angularVelocity = record.AngularVelocity;
             records.RemoveFirst();
+        }
+        else
+        {
+            OnOutOfRecords();
         }
     }
 }

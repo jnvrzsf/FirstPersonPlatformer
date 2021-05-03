@@ -45,44 +45,127 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sounds:
   - name: 0
-    clip: {fileID: 8300000, guid: adfa3fa225e2f4a45bfca8e5a6404fb8, type: 3}
+    settings:
+      clip: {fileID: 8300000, guid: adfa3fa225e2f4a45bfca8e5a6404fb8, type: 3}
+      volume: 1
+      loop: 0
+      is3DSound: 0
+      isUISound: 0
     source: {fileID: 0}
-    volume: 0.5
-    pitch: 1
-    spatialBlend: 0
-    loop: 0
   - name: 1
-    clip: {fileID: 8300000, guid: 871e8103b7ddc1144bed6f6bb12b3646, type: 3}
+    settings:
+      clip: {fileID: 8300000, guid: 871e8103b7ddc1144bed6f6bb12b3646, type: 3}
+      volume: 1
+      loop: 0
+      is3DSound: 0
+      isUISound: 0
     source: {fileID: 0}
-    volume: 1
-    pitch: 1
-    spatialBlend: 0
-    loop: 0
   - name: 2
-    clip: {fileID: 8300000, guid: 31deb1a636f2f5646bfd68f773abb95c, type: 3}
+    settings:
+      clip: {fileID: 8300000, guid: 31deb1a636f2f5646bfd68f773abb95c, type: 3}
+      volume: 1
+      loop: 0
+      is3DSound: 1
+      isUISound: 0
     source: {fileID: 0}
-    volume: 1
-    pitch: 1
-    spatialBlend: 1
-    loop: 0
   - name: 3
-    clip: {fileID: 8300000, guid: ece3fab09d6b7384b93c970190ab8967, type: 3}
+    settings:
+      clip: {fileID: 8300000, guid: ece3fab09d6b7384b93c970190ab8967, type: 3}
+      volume: 0.8
+      loop: 0
+      is3DSound: 1
+      isUISound: 0
     source: {fileID: 0}
-    volume: 1
-    pitch: 1
-    spatialBlend: 1
-    loop: 0
   - name: 4
-    clip: {fileID: 8300000, guid: 6dc8c2c642ffac94e94a02cb4dc7945a, type: 3}
+    settings:
+      clip: {fileID: 8300000, guid: 6dc8c2c642ffac94e94a02cb4dc7945a, type: 3}
+      volume: 0.5
+      loop: 0
+      is3DSound: 1
+      isUISound: 0
     source: {fileID: 0}
-    volume: 0.5
-    pitch: 1
-    spatialBlend: 0
-    loop: 0
   - name: 5
-    clip: {fileID: 8300000, guid: 1acb5a39a3290644289a0f96bf059822, type: 3}
+    settings:
+      clip: {fileID: 8300000, guid: 1acb5a39a3290644289a0f96bf059822, type: 3}
+      volume: 0.1
+      loop: 0
+      is3DSound: 1
+      isUISound: 0
     source: {fileID: 0}
-    volume: 0.05
-    pitch: 1
-    spatialBlend: 0
-    loop: 0
+  - name: 6
+    settings:
+      clip: {fileID: 8300000, guid: 547ecdf04f8727c43b6fba9e738c4f97, type: 3}
+      volume: 0.6
+      loop: 1
+      is3DSound: 0
+      isUISound: 0
+    source: {fileID: 0}
+  - name: 7
+    settings:
+      clip: {fileID: 8300000, guid: 794540cca47b54d44a10099bb7fa3f35, type: 3}
+      volume: 0.5
+      loop: 0
+      is3DSound: 0
+      isUISound: 0
+    source: {fileID: 0}
+  - name: 8
+    settings:
+      clip: {fileID: 8300000, guid: a50dd614a2b799a49a7a905c33e7a25f, type: 3}
+      volume: 0.4
+      loop: 0
+      is3DSound: 0
+      isUISound: 1
+    source: {fileID: 0}
+  - name: 9
+    settings:
+      clip: {fileID: 8300000, guid: cb657c1816c194f41854cd7e6fbe1961, type: 3}
+      volume: 0.2
+      loop: 0
+      is3DSound: 0
+      isUISound: 1
+    source: {fileID: 0}
+  - name: 10
+    settings:
+      clip: {fileID: 8300000, guid: d315348badc165649b071a8c105dd291, type: 3}
+      volume: 0.6
+      loop: 1
+      is3DSound: 0
+      isUISound: 1
+    source: {fileID: 0}
+  - name: 11
+    settings:
+      clip: {fileID: 8300000, guid: d5aa78e15e0bdad4ba7b8edfb43aeeb3, type: 3}
+      volume: 0.1
+      loop: 0
+      is3DSound: 0
+      isUISound: 0
+    source: {fileID: 0}
+  - name: 12
+    settings:
+      clip: {fileID: 8300000, guid: b756e36d10b08f440aaebe38bb8c23b8, type: 3}
+      volume: 0.8
+      loop: 0
+      is3DSound: 0
+      isUISound: 0
+    source: {fileID: 0}
+  - name: 13
+    settings:
+      clip: {fileID: 8300000, guid: 2563495bff1c47b469f6058d205a077b, type: 3}
+      volume: 0.4
+      loop: 0
+      is3DSound: 0
+      isUISound: 1
+    source: {fileID: 0}
+  - name: 14
+    settings:
+      clip: {fileID: 8300000, guid: 1f76cef570c41f143a5ed4d323eb2404, type: 3}
+      volume: 1
+      loop: 0
+      is3DSound: 1
+      isUISound: 0
+    source: {fileID: 0}
+  footstepClips:
+  - {fileID: 8300000, guid: cda9511e47073ba499db6cadb3cfd46a, type: 3}
+  - {fileID: 8300000, guid: 1c619865475a1ea43a51a10a4ee043cd, type: 3}
+  - {fileID: 8300000, guid: b347a14f60bab9b4590ef6877de18056, type: 3}
+  - {fileID: 8300000, guid: 6eeddb7527c91e84d853eb9f8cba9b2c, type: 3}

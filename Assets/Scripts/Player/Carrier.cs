@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Carrier : MonoBehaviour
 {
@@ -10,6 +8,7 @@ public class Carrier : MonoBehaviour
     private Pickupable pickupObject;
     private PlayerMovement player;
     private NonPlayerTrigger playerTrigger;
+    private Rewinder rewinder;
 
     public bool isCarrying => pickupObject != null;
     private float distance => Vector3.Distance(carryPoint.position, pickupObject.transform.position);
@@ -21,24 +20,64 @@ public class Carrier : MonoBehaviour
         ray = GetComponent<RayFromCamera>();
         player = GetComponent<PlayerMovement>();
         playerTrigger = GetComponentInChildren<NonPlayerTrigger>();
+        rewinder = GetComponent<Rewinder>();
     }
+
+    private bool carriedObjectIsTooFar => distance > maxDistance;
+    private bool canBeDropped => !playerTrigger.isPickupableOverlapping;
 
     private void Update()
     {
-        if (isCarrying)
+        if (!rewinder.isRewinding)
         {
-            if (!playerTrigger.isPickupableOverlapping && (input.PressedAction || distance > maxDistance))
+            if (isCarrying)
             {
-                Drop();
+                if ((input.PressedAction || carriedObjectIsTooFar) && canBeDropped)
+                {
+                    Drop();
+                }
+            }
+            else if (input.PressedAction)
+            {
+                if (ray.hitSomething && ray.hitInfo.distance < maxDistance)
+                {
+                    Pickupable p = ray.hitInfo.collider.GetComponent<Pickupable>();
+                    if (p != null)
+                    {
+                        // check whether the object to pick up is under the player, if so, return
+                        if (player.pickupablesUnderPlayer.Count > 0)
+                        {
+                            foreach (GameObject pickupable in player.pickupablesUnderPlayer)
+                            {
+                                if (GameObject.ReferenceEquals(ray.hitInfo.collider.gameObject, pickupable))
+                                {
+                                    return;
+                                }
+                            }
+                        }
+
+                        if (p.canBePickedUp)
+                        {
+                            PickUp(p);
+                        }
+                    }
+                }
             }
         }
-        else
-        {
-            if (input.PressedAction)
-            {
-                PickUp();
-            }
-        }
+    }
+
+    private void PickUp(Pickupable pickupable)
+    {
+        pickupObject = pickupable;
+        pickupObject.SetToPickedUp(this);
+        AudioManager.instance.Play(AudioType.ObjectPickUp);
+    }
+
+    public void Drop()
+    {
+        pickupObject.SetToDropped();
+        pickupObject = null;
+        AudioManager.instance.Play(AudioType.ObjectDrop);
     }
 
     private void FixedUpdate()
@@ -47,42 +86,5 @@ public class Carrier : MonoBehaviour
         {
             pickupObject.FollowCarrier(maxDistance);
         }
-    }
-
-    private void PickUp()
-    {
-        if (ray.hitSomething && ray.hitInfo.distance < maxDistance)
-        {
-            if (player.pickupablesUnderPlayer.Count > 0)
-            {
-                foreach (GameObject pickupable in player.pickupablesUnderPlayer)
-                {
-                    if (GameObject.ReferenceEquals(ray.hitInfo.collider.gameObject, pickupable))
-                    {
-                        return;
-                    }
-                }
-            }
-
-            Pickupable p = ray.hitInfo.collider.GetComponent<Pickupable>();
-            if (p != null)
-            {
-                if (p.canBePickedUp)
-                {
-                    Debug.Log("Picked up object");
-                    pickupObject = p;
-                    pickupObject.SetToPickedUp(this);
-                    AudioManager.instance.Play(AudioType.ObjectPickUp);
-                }
-            }
-        }
-    }
-
-    public void Drop()
-    {
-        Debug.Log("Dropped object");
-        pickupObject.SetToDropped();
-        pickupObject = null;
-        AudioManager.instance.Play(AudioType.ObjectDrop);
     }
 }
