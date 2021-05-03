@@ -12,6 +12,7 @@ public class RewindablePlayer : Rewindable
     private PlayerState playerState;
     private LinkedList<RBRecord> bodyRecords;
     private LinkedList<Quaternion> cameraRecords;
+    public override int currentRecordCount { get => bodyRecords.Count; }
 
     protected override void Awake()
     {

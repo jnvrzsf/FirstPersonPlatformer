@@ -6,6 +6,7 @@ public class RewindableRB : Rewindable
 {
     private LinkedList<RBRecord> records;
     private Rigidbody rb;
+    public override int currentRecordCount { get => records.Count; }
 
     protected override void Awake()
     {
