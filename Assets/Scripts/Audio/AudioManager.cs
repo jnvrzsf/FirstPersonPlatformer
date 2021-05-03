@@ -165,6 +165,7 @@ public class AudioManager : MonoBehaviour
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         StopAllSounds();
+        ResumeInGameSounds();
         UnsubscribeFromTimeChanges();
         SubScribeToTimeChanges();
     }

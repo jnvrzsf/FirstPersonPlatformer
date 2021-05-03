@@ -59,13 +59,11 @@ public class PauseMenu : MonoBehaviour
 
     public void Restart()
     {
-        isPaused = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void LoadMainMenu()
     {
-        isPaused = false;
         SceneManager.LoadScene("MainMenu");
     }
 

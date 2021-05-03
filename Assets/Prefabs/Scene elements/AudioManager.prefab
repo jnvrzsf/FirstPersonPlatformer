@@ -95,7 +95,7 @@ MonoBehaviour:
   - name: 6
     settings:
       clip: {fileID: 8300000, guid: 547ecdf04f8727c43b6fba9e738c4f97, type: 3}
-      volume: 0.6
+      volume: 0.4
       loop: 1
       is3DSound: 0
       isUISound: 0
