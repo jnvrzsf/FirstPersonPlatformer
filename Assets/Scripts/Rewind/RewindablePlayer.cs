@@ -10,14 +10,14 @@ public class RewindablePlayer : Rewindable
     [SerializeField] private Transform orientation;
 
     private PlayerState playerState;
-    private LinkedList<RBRecord> bodyRecords;
+    private LinkedList<Record> bodyRecords;
     private LinkedList<Quaternion> cameraRecords;
     public override int currentRecordCount { get => bodyRecords.Count; }
 
     protected override void Awake()
     {
         playerState = GetComponent<PlayerState>();
-        bodyRecords = new LinkedList<RBRecord>();
+        bodyRecords = new LinkedList<Record>();
         cameraRecords = new LinkedList<Quaternion>();
         rb = GetComponent<Rigidbody>();
     }
@@ -39,14 +39,14 @@ public class RewindablePlayer : Rewindable
 
     private void ReapplyForces()
     {
-        RBRecord record = bodyRecords.First.Value;
+        Record record = bodyRecords.First.Value;
         rb.velocity = record.Velocity;
         rb.angularVelocity = record.AngularVelocity;
     }
 
     protected override void Record()
     {
-        bodyRecords.AddFirst(new RBRecord(transform.position, orientation.rotation, rb.velocity, rb.angularVelocity));
+        bodyRecords.AddFirst(new Record(transform.position, orientation.rotation, rb.velocity, rb.angularVelocity));
         cameraRecords.AddFirst(cam.rotation);
         if (bodyRecords.Count > maximumCount && cameraRecords.Count > maximumCount)
         {
@@ -59,7 +59,7 @@ public class RewindablePlayer : Rewindable
     {
         if (bodyRecords.Count > 1 && cameraRecords.Count > 1)
         {
-            RBRecord record = bodyRecords.First.Value;
+            Record record = bodyRecords.First.Value;
             transform.position = record.Position;
             orientation.rotation = record.Rotation;
             bodyRecords.RemoveFirst();

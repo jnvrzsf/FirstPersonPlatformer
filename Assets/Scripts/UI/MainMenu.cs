@@ -15,11 +15,11 @@ public class MainMenu : MonoBehaviour
 
         if (DataManager.instance.GetCurrentLevel() == 0)
         {
-            playText.text = "Play";
+            playText.text = Constants.Play;
         }
         else
         {
-            playText.text = "Continue";
+            playText.text = Constants.Continue;
         }
     }
 
@@ -36,7 +36,7 @@ public class MainMenu : MonoBehaviour
     {
         int currentLevel = DataManager.instance.GetCurrentLevel();
         int levelToLoad = currentLevel == 0 ? 1 : currentLevel;
-        string levelName = "Level" + levelToLoad.ToString();
+        string levelName = Constants.Level + levelToLoad.ToString();
         SceneManager.LoadScene(levelName);
     }
 

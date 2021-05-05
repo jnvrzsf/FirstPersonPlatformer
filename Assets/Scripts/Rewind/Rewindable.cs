@@ -5,7 +5,7 @@ public abstract class Rewindable : MonoBehaviour
 {
     protected bool isRewinding;
     protected float recordTimeInSeconds = 15f;
-    protected float maximumCount => Mathf.Round(recordTimeInSeconds / Time.fixedDeltaTime);
+    protected int maximumCount => Mathf.RoundToInt(recordTimeInSeconds / Time.fixedDeltaTime);
     public abstract int currentRecordCount { get; }
 
     public event Action OutOfRecords;

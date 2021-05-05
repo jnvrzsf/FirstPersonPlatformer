@@ -6,7 +6,7 @@ public class InputManager : MonoBehaviour
     public float MouseY { get; private set; }
     public float Horizontal { get; private set; }
     public float Vertical { get; private set; }
-    public bool IsIdle => Horizontal + Vertical == 0;
+    public bool IsIdle => Mathf.Approximately(Horizontal, 0) && Mathf.Approximately(Vertical, 0);
     public bool PressedJump { get; private set; }
     public bool isPressingShift { get; private set; }
     public bool PressedAction { get; private set; }
@@ -16,10 +16,10 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        MouseX = Input.GetAxis("Mouse X");
-        MouseY = Input.GetAxis("Mouse Y");
-        Horizontal = Input.GetAxisRaw("Horizontal");
-        Vertical = Input.GetAxisRaw("Vertical");
+        MouseX = Input.GetAxis(Constants.MouseX);
+        MouseY = Input.GetAxis(Constants.MouseY);
+        Horizontal = Input.GetAxisRaw(Constants.Horizontal);
+        Vertical = Input.GetAxisRaw(Constants.Vertical);
         PressedJump = Input.GetKeyDown(KeyCode.Space);
         isPressingShift = Input.GetKey(KeyCode.LeftShift);
         PressedAction = Input.GetMouseButtonDown(0);

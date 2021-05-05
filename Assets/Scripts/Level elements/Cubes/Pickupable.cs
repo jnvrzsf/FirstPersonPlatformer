@@ -29,8 +29,18 @@ public abstract class Pickupable : MonoBehaviour
         float speed = Mathf.SmoothStep(minSpeed, maxSpeed, distance / maxDistance) * Time.fixedDeltaTime;
         rb.velocity = direction * speed;
     }
-    public abstract void SetToPickedUp(Carrier c);
-    public abstract void SetToDropped();
+    public virtual void SetToPickedUp(Carrier c)
+    {
+        carrier = c;
+        gameObject.layer = Layers.PickedUp;
+    }
+
+    public virtual void SetToDropped()
+    {
+        carrier = null;
+        gameObject.layer = Layers.Pickupable;
+    }
+
     public virtual void SetToUntouchable() {
         carrier?.Drop();
         canBePickedUp = false;
@@ -38,7 +48,7 @@ public abstract class Pickupable : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("DeathZone") || other.CompareTag("DestructiveField"))
+        if (other.CompareTag(Tags.DeathZone) || other.CompareTag(Tags.DestructiveField))
         {
             spawner?.SpawnNewCube();
             Destroy();
@@ -47,7 +57,7 @@ public abstract class Pickupable : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!collision.gameObject.CompareTag("Player"))
+        if (!collision.gameObject.CompareTag(Tags.Player))
         {
             AudioManager.instance.PlayAtPoint(AudioType.Collision, collision.GetContact(0).point);
         }
@@ -70,7 +80,7 @@ public abstract class Pickupable : MonoBehaviour
         while (percentage < 1f)
         {
             percentage += Time.deltaTime / seconds;
-            rend.material.SetFloat("DissolvePercentage", percentage);
+            rend.material.SetFloat(Constants.DissolvePercentage, percentage);
             yield return null;
         }
         Destroy(gameObject);

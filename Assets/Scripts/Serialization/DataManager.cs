@@ -7,8 +7,7 @@ public class DataManager : MonoBehaviour
 {
     public static DataManager instance { get; private set; }
     private GameState gameState;
-    private string path;
-    public bool isGameStateSaved => File.Exists(path);
+    public bool isGameStateSaved => File.Exists(Paths.GameStatePath);
 
     private void Awake()
     {
@@ -23,7 +22,6 @@ public class DataManager : MonoBehaviour
             return;
         }
 
-        path = Application.persistentDataPath + "/GameState.json";
         if (isGameStateSaved)
         {
             LoadGameState();
@@ -36,14 +34,14 @@ public class DataManager : MonoBehaviour
 
     private void LoadGameState()
     {
-        string jsonString = File.ReadAllText(path);
+        string jsonString = File.ReadAllText(Paths.GameStatePath);
         gameState = JsonUtility.FromJson<GameState>(jsonString);
     }
 
     private void SaveGameState()
     {
         string jsonString = JsonUtility.ToJson(gameState, true);
-        File.WriteAllText(path, jsonString);
+        File.WriteAllText(Paths.GameStatePath, jsonString);
     }
 
     public int GetHighestLevel()

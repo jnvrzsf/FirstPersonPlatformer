@@ -47,9 +47,9 @@ public class Carrier : MonoBehaviour
                         // check whether the object to pick up is under the player, if so, return
                         if (player.pickupablesUnderPlayer.Count > 0)
                         {
-                            foreach (GameObject pickupable in player.pickupablesUnderPlayer)
+                            foreach (Collider col in player.pickupablesUnderPlayer)
                             {
-                                if (GameObject.ReferenceEquals(ray.hitInfo.collider.gameObject, pickupable))
+                                if (GameObject.ReferenceEquals(ray.hitInfo.collider, col))
                                 {
                                     return;
                                 }

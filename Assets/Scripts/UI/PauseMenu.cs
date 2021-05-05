@@ -64,7 +64,7 @@ public class PauseMenu : MonoBehaviour
 
     public void LoadMainMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene(Constants.MainMenu);
     }
 
     public void ShowPopup()
@@ -94,5 +94,5 @@ public class PauseMenu : MonoBehaviour
     }
 
     public void OnPointerEnter() => AudioManager.instance.PlayOneShot(AudioType.Hover);
-    public void OnPointerClick() =>  AudioManager.instance.PlayOneShot(AudioType.Click);
+    public void OnPointerClick() => AudioManager.instance.PlayOneShot(AudioType.Click);
 }

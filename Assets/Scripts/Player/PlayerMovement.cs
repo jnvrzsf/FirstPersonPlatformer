@@ -16,14 +16,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private LayerMask groundMask;
     private RaycastHit raycastHit;
-    private RaycastHit[] sphereCastHits;
+    private readonly RaycastHit[] sphereCastHitBuffer = new RaycastHit[10];
     private bool isGrounded; // for playing footsteps
     private bool canJump;
     private bool jump;
     private bool isOnSlope;
     private bool isSlopeTooSteep;
     [HideInInspector]
-    public List<GameObject> pickupablesUnderPlayer;
+    public List<Collider> pickupablesUnderPlayer;
     private bool isOnMovingObject;
     private Transform movingObjectUnderPlayer;
     private const float walkSpeed = 5f;
@@ -36,13 +36,12 @@ public class PlayerMovement : MonoBehaviour
     public void Freeze() => isFrozen = true;
     public void Unfreeze() => isFrozen = false;
 
-    private AudioSource stepAudio;
-
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
         input = FindObjectOfType<InputManager>();
+        Debug.Assert(input != null);
     }
 
     private void Update()
@@ -139,14 +138,16 @@ public class PlayerMovement : MonoBehaviour
         // check if we can jump, if we are standing on cubes or a moving object
         float radius = col.bounds.extents.x - 0.01f; // little smaller than the capsule's, so that we can't jump off walls
         Vector3 position = new Vector3(transform.position.x, transform.position.y - col.bounds.extents.y + col.bounds.extents.x, transform.position.z);
-        sphereCastHits = Physics.SphereCastAll(position, radius, Vector3.down, largeGroundOffset, groundMask, QueryTriggerInteraction.Ignore);
+        int hitCount = Physics.SphereCastNonAlloc(position, radius, Vector3.down, sphereCastHitBuffer, largeGroundOffset, groundMask, QueryTriggerInteraction.Ignore);
 
         isOnMovingObject = false;
-        List<GameObject> pickupables = new List<GameObject>();
-        if (sphereCastHits.Length > 0)
+        pickupablesUnderPlayer.Clear();
+        if (hitCount > 0)
         {
-            foreach (RaycastHit hit in sphereCastHits)
+            for (int i = 0; i < hitCount; i++)
             {
+                RaycastHit hit = sphereCastHitBuffer[i];
+
                 canJump = true;
 
                 if (hit.distance < smallGroundOffset)
@@ -158,12 +159,12 @@ public class PlayerMovement : MonoBehaviour
                     }
                     isGrounded = true;
 
-                    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Pickupable"))
+                    if (hit.collider.gameObject.layer == Layers.Pickupable)
                     {
-                        pickupables.Add(hit.collider.gameObject);
+                        pickupablesUnderPlayer.Add(hit.collider);
                     }
 
-                    if (hit.collider.CompareTag("Moving"))
+                    if (hit.collider.CompareTag(Tags.Moving))
                     {
                         isOnMovingObject = true;
                         movingObjectUnderPlayer = hit.transform;
@@ -179,7 +180,6 @@ public class PlayerMovement : MonoBehaviour
         {
             canJump = false;
         }
-        pickupablesUnderPlayer = pickupables;
 
         // check if we are on a slope and the slope angle
         if (canJump) // only if we are no farther than jump distance from the ground
@@ -188,7 +188,7 @@ public class PlayerMovement : MonoBehaviour
             if (Physics.Raycast(feetPosition, Vector3.down, out raycastHit, smallGroundOffset, groundMask, QueryTriggerInteraction.Ignore))
             {
                 float groundAngle = Vector3.Angle(Vector3.up, raycastHit.normal);
-                isOnSlope = groundAngle > 0f ? true : false;
+                isOnSlope = groundAngle > 0f;
                 isSlopeTooSteep = groundAngle > maxSlopeAngle ? true : false;
             }
             else

@@ -38,7 +38,7 @@ public class LevelManager : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag(Tags.Player))
         {
             SceneManager.LoadScene(nextSceneName);
         }

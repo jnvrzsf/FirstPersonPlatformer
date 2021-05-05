@@ -28,7 +28,7 @@ public class PlayerState : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("DeathZone") && !isRewinding)
+        if (other.CompareTag(Tags.DeathZone) && !isRewinding)
         {
             isDead = true;
         }

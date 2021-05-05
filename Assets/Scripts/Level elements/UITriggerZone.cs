@@ -11,7 +11,7 @@ public class UITriggerZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag(Tags.Player))
         {
             if (coroutine != null)
             {
@@ -23,7 +23,7 @@ public class UITriggerZone : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag(Tags.Player))
         {
             if (coroutine != null)
             {

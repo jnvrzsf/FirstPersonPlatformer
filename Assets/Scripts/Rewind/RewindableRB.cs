@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class RewindableRB : Rewindable
 {
-    private LinkedList<RBRecord> records;
+    private LinkedList<Record> records;
     private Rigidbody rb;
     public override int currentRecordCount { get => records.Count; }
 
     protected override void Awake()
     {
-        records = new LinkedList<RBRecord>();
+        records = new LinkedList<Record>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -34,14 +34,14 @@ public class RewindableRB : Rewindable
 
     private void ReapplyForces()
     {
-        RBRecord record = records.First.Value;
+        Record record = records.First.Value;
         rb.velocity = record.Velocity;
         rb.angularVelocity = record.AngularVelocity;
     }
 
     protected override void Record()
     {
-        records.AddFirst(new RBRecord(transform.position, transform.rotation, rb.velocity, rb.angularVelocity));
+        records.AddFirst(new Record(transform.position, transform.rotation, rb.velocity, rb.angularVelocity));
         if (records.Count > maximumCount)
         {
             records.RemoveLast();
@@ -52,7 +52,7 @@ public class RewindableRB : Rewindable
     {
         if (records.Count > 1)
         {
-            RBRecord record = records.First.Value;
+            Record record = records.First.Value;
             transform.position = record.Position;
             transform.rotation = record.Rotation;
             records.RemoveFirst();

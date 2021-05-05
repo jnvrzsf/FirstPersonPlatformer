@@ -1,18 +1,14 @@
-﻿using UnityEngine;
-
-public class LevitatingCube : Pickupable
+﻿public class LevitatingCube : Pickupable
 {
     public override void SetToPickedUp(Carrier c)
     {
-        carrier = c;
+        base.SetToPickedUp(c);
         rb.isKinematic = false;
-        gameObject.layer = LayerMask.NameToLayer("PickedUp");
     }
 
     public override void SetToDropped()
     {
-        carrier = null;
+        base.SetToDropped();
         rb.isKinematic = true;
-        gameObject.layer = LayerMask.NameToLayer("Pickupable");
     }
 }
