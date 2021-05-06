@@ -2,15 +2,15 @@
 
 public class PlayerState : MonoBehaviour
 {
-    private MouseLook look;
-    private PlayerMovement characterController;
-    public bool isRewinding;
-    public bool isDead;
+    private MouseLook cam;
+    private PlayerMovement player;
+    [HideInInspector] public bool isRewinding;
+    [HideInInspector] public bool isDead;
 
     private void Awake()
     {
-        look = GetComponent<MouseLook>();
-        characterController = GetComponent<PlayerMovement>();
+        cam = GetComponent<MouseLook>();
+        player = GetComponent<PlayerMovement>();
     }
 
     private void Update()
@@ -36,13 +36,13 @@ public class PlayerState : MonoBehaviour
 
     public void FreezePlayer()
     {
-        look.Freeze();
-        characterController.Freeze();
+        cam.Freeze();
+        player.Freeze();
     }
 
     public void UnfreezePlayer()
     {
-        look.Unfreeze();
-        characterController.Unfreeze();
+        cam.Unfreeze();
+        player.Unfreeze();
     }
 }

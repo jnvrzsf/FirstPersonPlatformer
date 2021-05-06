@@ -7,6 +7,7 @@ public class AudioManager : MonoBehaviour
     public static AudioManager instance;
     [SerializeField] private AudioObject[] sounds; // for serialization
     private Dictionary<AudioType, AudioObject> audioObjects; // for faster lookup
+    private TimeManager timeManager;
 
     [SerializeField] private AudioClip[] footstepClips;
     private AudioSource footstepsSource;
@@ -14,8 +15,6 @@ public class AudioManager : MonoBehaviour
     private float lastPlayedTime;
     private const float footstepsVolume = 0.8f;
     private const float delayBetweenSteps = 0.4f;
-
-    private TimeManager timeManager;
 
     private void Awake()
     {

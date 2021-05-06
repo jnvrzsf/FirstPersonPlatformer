@@ -15,7 +15,7 @@ public abstract class Pickupable : MonoBehaviour
     private float maxSpeed = 10000;
     private AudioObject dissolveAudio;
 
-    private void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();

@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
         input = FindObjectOfType<InputManager>();
-        Debug.Assert(input != null);
+        Debug.Assert(input != null, "InputManager not found.");
     }
 
     private void Update()

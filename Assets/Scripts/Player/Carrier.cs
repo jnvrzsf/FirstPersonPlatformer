@@ -2,14 +2,13 @@
 
 public class Carrier : MonoBehaviour
 {
-    public Transform carryPoint;
     private InputManager input;
     private RayFromCamera ray;
-    private Pickupable pickupObject;
     private PlayerMovement player;
     private NonPlayerTrigger playerTrigger;
     private Rewinder rewinder;
-
+    public Transform carryPoint;
+    private Pickupable pickupObject;
     public bool isCarrying => pickupObject != null;
     private float distance => Vector3.Distance(carryPoint.position, pickupObject.transform.position);
     private float maxDistance = 5f;

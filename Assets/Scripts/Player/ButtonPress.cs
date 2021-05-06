@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ButtonPress : MonoBehaviour
 {
-    private RayFromCamera ray;
     private InputManager input;
+    private RayFromCamera ray;
     private const float maxDistance = 2;
 
     void Awake()
