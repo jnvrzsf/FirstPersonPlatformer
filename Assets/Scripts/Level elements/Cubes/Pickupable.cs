@@ -11,8 +11,10 @@ public abstract class Pickupable : MonoBehaviour
     [SerializeField] private Material dissolveMat;
     public bool canBePickedUp { get; private set; } = true;
     protected bool isCarried => carrier != null;
-    private float minSpeed = 0;
-    private float maxSpeed = 10000;
+
+    private const float minSpeed = 0;
+    protected abstract float maxSpeed { get; }
+
     private AudioObject dissolveAudio;
 
     private void Awake()
@@ -29,6 +31,7 @@ public abstract class Pickupable : MonoBehaviour
         float speed = Mathf.SmoothStep(minSpeed, maxSpeed, distance / maxDistance) * Time.fixedDeltaTime;
         rb.velocity = direction * speed;
     }
+
     public virtual void SetToPickedUp(Carrier c)
     {
         carrier = c;
@@ -41,7 +44,10 @@ public abstract class Pickupable : MonoBehaviour
         gameObject.layer = Layers.Pickupable;
     }
 
-    public virtual void SetToUntouchable() {
+    /// <summary>
+    /// So it can't be picked up while being destroyed.
+    /// </summary>
+    public void SetToUntouchable() {
         carrier?.Drop();
         canBePickedUp = false;
     }

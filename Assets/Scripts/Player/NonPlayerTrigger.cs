@@ -2,7 +2,7 @@
 
 public class NonPlayerTrigger : MonoBehaviour
 {
-    public bool isPickupableOverlapping;
+    public bool isPickupableOverlapping { get; private set; }
 
     private void OnTriggerEnter(Collider other)
     {

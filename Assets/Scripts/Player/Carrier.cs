@@ -11,7 +11,7 @@ public class Carrier : MonoBehaviour
     private Pickupable pickupObject;
     public bool isCarrying => pickupObject != null;
     private float distance => Vector3.Distance(carryPoint.position, pickupObject.transform.position);
-    private float maxDistance = 5f;
+    private const float maxDistance = 5f;
 
     private void Awake()
     {

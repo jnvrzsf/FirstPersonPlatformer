@@ -1146,7 +1146,7 @@ GameObject:
   - component: {fileID: 278805577}
   - component: {fileID: 278805576}
   - component: {fileID: 278805575}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: RewindTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1548,7 +1548,7 @@ GameObject:
   - component: {fileID: 627344123}
   - component: {fileID: 627344122}
   - component: {fileID: 627344121}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: RewindYourselfTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -41,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
         input = FindObjectOfType<InputManager>();
-        Debug.Assert(input != null, "InputManager not found.");
+        Assert.IsNotNull(input, "InputManager not found.");
     }
 
     private void Update()

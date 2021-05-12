@@ -398,7 +398,7 @@ PrefabInstance:
     - target: {fileID: 1852612996764182794, guid: c8d5f44cc2e19a346a71a20b2d44b8df,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 1852612996764182794, guid: c8d5f44cc2e19a346a71a20b2d44b8df,
         type: 3}
@@ -566,7 +566,7 @@ GameObject:
   - component: {fileID: 112230807}
   - component: {fileID: 112230809}
   - component: {fileID: 112230808}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SpaceTriggerZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -731,7 +731,7 @@ GameObject:
   - component: {fileID: 158973513}
   - component: {fileID: 158973515}
   - component: {fileID: 158973514}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ActionTriggerZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -874,7 +874,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-360972
+  m_Name: pb_Mesh-162996
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1037,7 +1037,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh86778
+  m_Name: pb_Mesh59688
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3046,7 +3046,7 @@ GameObject:
   - component: {fileID: 1449544871}
   - component: {fileID: 1449544873}
   - component: {fileID: 1449544872}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: WASDTriggerZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3104,7 +3104,7 @@ GameObject:
   - component: {fileID: 1471698022}
   - component: {fileID: 1471698024}
   - component: {fileID: 1471698023}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: EscTriggerZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5755,7 +5755,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh86750
+  m_Name: pb_Mesh59660
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6212,7 +6212,7 @@ PrefabInstance:
     - target: {fileID: 1852612996764182794, guid: c8d5f44cc2e19a346a71a20b2d44b8df,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -31
+      value: -29
       objectReference: {fileID: 0}
     - target: {fileID: 1852612996764182794, guid: c8d5f44cc2e19a346a71a20b2d44b8df,
         type: 3}
@@ -6222,7 +6222,7 @@ PrefabInstance:
     - target: {fileID: 1852612996764182794, guid: c8d5f44cc2e19a346a71a20b2d44b8df,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 1852612996764182794, guid: c8d5f44cc2e19a346a71a20b2d44b8df,
         type: 3}
@@ -6976,7 +6976,7 @@ PrefabInstance:
     - target: {fileID: 6919420881714066628, guid: ca88a95e0fda37b4f88334cd015a8e40,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -23
+      value: -21
       objectReference: {fileID: 0}
     - target: {fileID: 6919420881714066628, guid: ca88a95e0fda37b4f88334cd015a8e40,
         type: 3}
@@ -6986,7 +6986,7 @@ PrefabInstance:
     - target: {fileID: 6919420881714066628, guid: ca88a95e0fda37b4f88334cd015a8e40,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6919420881714066628, guid: ca88a95e0fda37b4f88334cd015a8e40,
         type: 3}
