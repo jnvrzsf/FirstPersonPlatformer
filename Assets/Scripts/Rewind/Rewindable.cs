@@ -4,7 +4,7 @@ using UnityEngine;
 public abstract class Rewindable : MonoBehaviour
 {
     protected bool isRewinding;
-    protected float recordTimeInSeconds = 15f;
+    private const float recordTimeInSeconds = 15f;
     protected int maximumCount => Mathf.RoundToInt(recordTimeInSeconds / Time.fixedDeltaTime);
     public abstract int currentRecordCount { get; }
 

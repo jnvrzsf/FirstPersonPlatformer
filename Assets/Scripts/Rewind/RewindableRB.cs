@@ -1,16 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class RewindableRB : Rewindable
 {
-    private LinkedList<Record> records;
-    private Rigidbody rb;
+    protected LinkedList<RBRecord> records;
+    protected Rigidbody rb;
     public override int currentRecordCount { get => records.Count; }
 
     protected override void Awake()
     {
-        records = new LinkedList<Record>();
+        records = new LinkedList<RBRecord>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -32,16 +31,16 @@ public class RewindableRB : Rewindable
         ReapplyForces();
     }
 
-    private void ReapplyForces()
+    protected void ReapplyForces()
     {
-        Record record = records.First.Value;
+        RBRecord record = records.First.Value;
         rb.velocity = record.Velocity;
         rb.angularVelocity = record.AngularVelocity;
     }
 
     protected override void Record()
     {
-        records.AddFirst(new Record(transform.position, transform.rotation, rb.velocity, rb.angularVelocity));
+        records.AddFirst(new RBRecord(transform.position, transform.rotation, rb.velocity, rb.angularVelocity));
         if (records.Count > maximumCount)
         {
             records.RemoveLast();
@@ -52,7 +51,7 @@ public class RewindableRB : Rewindable
     {
         if (records.Count > 1)
         {
-            Record record = records.First.Value;
+            RBRecord record = records.First.Value;
             transform.position = record.Position;
             transform.rotation = record.Rotation;
             records.RemoveFirst();
