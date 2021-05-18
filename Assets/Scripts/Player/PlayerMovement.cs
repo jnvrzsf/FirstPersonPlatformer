@@ -124,7 +124,7 @@ public class PlayerMovement : MonoBehaviour
                 y = jumpForce;
                 if (!isGrounded)
                 {
-                    AudioManager.instance.Play(AudioType.Landing);
+                    AudioManager.instance.PlayOneShot(AudioType.Landing);
                 }
                 AudioManager.instance.Play(AudioType.Jump);
             }
@@ -156,7 +156,7 @@ public class PlayerMovement : MonoBehaviour
                     if (isGrounded == false)
                     {
                         // landing
-                        AudioManager.instance.Play(AudioType.Landing);
+                        AudioManager.instance.PlayOneShot(AudioType.Landing);
                     }
                     isGrounded = true;
 

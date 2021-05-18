@@ -15,8 +15,6 @@ public abstract class Pickupable : MonoBehaviour
     private const float minSpeed = 0;
     protected abstract float maxSpeed { get; }
 
-    private AudioObject dissolveAudio;
-
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -74,14 +72,14 @@ public abstract class Pickupable : MonoBehaviour
         SetToUntouchable();
         rb.useGravity = false;
         Destroy(col);
-        dissolveAudio = AudioManager.instance.PlayOnGameObject(AudioType.CubeDissolve, gameObject);
+        AudioManager.instance.PlayOnGameObject(AudioType.CubeDissolve, gameObject);
         rend.material = dissolveMat;
         StartCoroutine(Dissolve());
     }
 
     private IEnumerator Dissolve()
     {
-        float seconds = dissolveAudio.source.clip.length;
+        float seconds = AudioManager.instance.GetAudioLength(AudioType.CubeDissolve);
         float percentage = 0f;
         while (percentage < 1f)
         {

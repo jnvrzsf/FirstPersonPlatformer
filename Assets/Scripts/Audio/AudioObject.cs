@@ -4,21 +4,27 @@ using UnityEngine;
 [Serializable]
 public class AudioObject
 {
-    public AudioType name;
-    public AudioSourceSettings settings;
-    [HideInInspector] public AudioSource source;
+    [SerializeField] private AudioType name;
+    [SerializeField] private AudioSourceSettings settings;
+    private AudioSource source;
 
-    public void InitAudioSource(GameObject gameObject)
-    {
-        AddAudioSource(gameObject);
-        InitAudioSourceFromSettings();
-    }
+    public AudioType Name => name;
+    public AudioClip Clip => settings.clip;
+    public bool Is3DSound => settings.is3DSound;
+
+    public AudioObject() { }
 
     public AudioObject(AudioObject ao, GameObject go)
     {
         name = ao.name;
         settings = ao.settings;
         AddAudioSource(go);
+        InitAudioSourceFromSettings();
+    }
+
+    public void InitAudioSource(GameObject gameObject)
+    {
+        AddAudioSource(gameObject);
         InitAudioSourceFromSettings();
     }
 
@@ -42,6 +48,30 @@ public class AudioObject
             {
                 source.ignoreListenerPause = true;
             }
+        }
+    }
+
+    public void Play()
+    {
+        if (source != null)
+        {
+            source.Play();
+        }
+    }
+
+    public void PlayOneShot()
+    {
+        if (source != null)
+        {
+            source.PlayOneShot(settings.clip);
+        }
+    }
+
+    public void Stop()
+    {
+        if (source != null)
+        {
+            source.Stop();
         }
     }
 }

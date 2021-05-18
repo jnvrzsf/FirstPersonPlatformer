@@ -69,14 +69,14 @@ public class Carrier : MonoBehaviour
     {
         pickupObject = pickupable;
         pickupObject.SetToPickedUp(this);
-        AudioManager.instance.Play(AudioType.ObjectPickUp);
+        AudioManager.instance.PlayOneShot(AudioType.ObjectPickUp);
     }
 
     public void Drop()
     {
         pickupObject.SetToDropped();
         pickupObject = null;
-        AudioManager.instance.Play(AudioType.ObjectDrop);
+        AudioManager.instance.PlayOneShot(AudioType.ObjectDrop);
     }
 
     private void FixedUpdate()

@@ -11,7 +11,6 @@ public class Rewinder : MonoBehaviour
     private RewindablePlayer player;
     private Carrier carrier;
     private TimeManager timeManager;
-    private AudioObject rewindAudio;
     private ChromaticAberration chromaticAberration;
     [SerializeField] private GameObject rewindCountdown;
     private TextMeshProUGUI rewindCountdownText;
@@ -27,11 +26,6 @@ public class Rewinder : MonoBehaviour
         VolumeProfile volumeProfile = Camera.main.GetComponent<Volume>().profile;
         volumeProfile.TryGet<ChromaticAberration>(out chromaticAberration);
         rewindCountdownText = rewindCountdown.GetComponentInChildren<TextMeshProUGUI>();
-    }
-
-    private void Start()
-    {
-        AudioManager.instance.TryGetAudioObject(AudioType.Rewind, out rewindAudio);
     }
 
     private void Update()
@@ -73,7 +67,7 @@ public class Rewinder : MonoBehaviour
         rewindedObject = rewindable;
         rewindedObject.OutOfRecords += StopRewinding;
         rewindedObject.StartRewinding();
-        rewindAudio?.source.Play();
+        AudioManager.instance.Play(AudioType.Rewind);
         chromaticAberration.active = true;
         SetCountdownText();
         rewindCountdown.SetActive(true);
@@ -84,7 +78,7 @@ public class Rewinder : MonoBehaviour
         rewindedObject.OutOfRecords -= StopRewinding;
         rewindedObject.StopRewinding();
         rewindedObject = null;
-        rewindAudio?.source.Stop();
+        AudioManager.instance.Stop(AudioType.Rewind);
         chromaticAberration.active = false;
         rewindCountdown.SetActive(false);
     }

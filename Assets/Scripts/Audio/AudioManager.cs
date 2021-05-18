@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager instance;
+    public static AudioManager instance { get; private set; }
     [SerializeField] private AudioObject[] sounds; // for serialization
     private Dictionary<AudioType, AudioObject> audioObjects; // for faster lookup
     private TimeManager timeManager;
@@ -40,15 +40,15 @@ public class AudioManager : MonoBehaviour
         audioObjects = new Dictionary<AudioType, AudioObject>();
         foreach (AudioObject audio in sounds)
         {
-            if (!audio.settings.is3DSound)
+            if (!audio.Is3DSound)
             {
                 audio.InitAudioSource(gameObject);
             }
-            audioObjects.Add(audio.name, audio);
+            audioObjects.Add(audio.Name, audio);
         }
     }
 
-    public bool TryGetAudioObject(AudioType audioName, out AudioObject audioObject)
+    private bool TryGetAudioObject(AudioType audioName, out AudioObject audioObject)
     {
         AudioObject existingAudio;
         audioObject = null;
@@ -65,20 +65,32 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Eg. for looping audio, for audio that doesnt rapidly fires.
+    /// For audio that won't be interrupted,
+    /// for looping audio,
+    /// for audio that can be stopped.
     /// <summary>
     /// <param name="audioName"></param>
     public void Play(AudioType audioName)
     {
         AudioObject audio;
+        if (TryGetAudioObject(audioName, out audio)) // if 2d sound
+        {
+            audio.Play();
+        }
+    }
+
+    public void Stop(AudioType audioName)
+    {
+        AudioObject audio;
         if (TryGetAudioObject(audioName, out audio))
         {
-            audio.source.Play();
+            audio.Stop();
         }
     }
 
     /// <summary>
-    /// Eg. for audio that should not be interrupted by playing it again.
+    /// For audio that fires a lot of times, 
+    /// for audio that cannot be stopped.
     /// </summary>
     /// <param name="audioName"></param>
     public void PlayOneShot(AudioType audioName)
@@ -86,7 +98,7 @@ public class AudioManager : MonoBehaviour
         AudioObject audio;
         if (TryGetAudioObject(audioName, out audio))
         {
-            audio.source.PlayOneShot(audio.source.clip);
+            audio.PlayOneShot();
         }
     }
 
@@ -100,21 +112,31 @@ public class AudioManager : MonoBehaviour
         AudioObject audio;
         if (TryGetAudioObject(audioName, out audio))
         {
-            AudioSource.PlayClipAtPoint(audio.settings.clip, point);
+            AudioSource.PlayClipAtPoint(audio.Clip, point);
         }
     }
 
     /// <summary>
-    /// For 3D sounds. Requesting script can decide whether to use 
-    /// eg. Play or PlayOneShot on the AudioSource.
+    /// For 3D sounds. Adds a new AudioSource to the gameobject, plays its clip.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="gameObject"></param>
+    public void PlayOnGameObject(AudioType audioName, GameObject gameObject)
+    {
+        AudioObject newAudio = AddAudioToGameObject(audioName, gameObject);
+        newAudio.Play();
+    }
+
+    /// <summary>
+    /// For 3D sounds.
     /// </summary>
     /// <param name="audioName"></param>
     /// <param name="gameObject"></param>
     /// <returns></returns>
-    public AudioObject AddAudioToGameObject(AudioType audioName, GameObject gameObject)
+    private AudioObject AddAudioToGameObject(AudioType audioName, GameObject gameObject)
     {
         AudioObject originalAudio;
-        AudioObject newAudio = null; // new empty?
+        AudioObject newAudio = new AudioObject();
         if (TryGetAudioObject(audioName, out originalAudio))
         {
             newAudio = new AudioObject(originalAudio, gameObject);
@@ -122,17 +144,17 @@ public class AudioManager : MonoBehaviour
         return newAudio;
     }
 
-    /// <summary>
-    /// For 3D sounds. Adds a new AudioSource to the gameobject, plays its clip, 
-    /// and returns the AudioObject so the requesting script can have control over the play.
-    /// </summary>
-    /// <param name="name"></param>
-    /// <param name="gameObject"></param>
-    public AudioObject PlayOnGameObject(AudioType audioName, GameObject gameObject)
+    public float GetAudioLength(AudioType audioName)
     {
-        AudioObject newAudio = AddAudioToGameObject(audioName, gameObject);
-        newAudio.source.Play();
-        return newAudio;
+        AudioObject audio;
+        if (TryGetAudioObject(audioName, out audio))
+        {
+            return audio.Clip.length;
+        }
+        else
+        {
+            return 0f;
+        }
     }
 
     public void PlayWalkingSound()
@@ -161,7 +183,7 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     /// <param name="scene"></param>
     /// <param name="mode"></param>
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         StopAllSounds();
         ResumeInGameSounds();
@@ -211,10 +233,7 @@ public class AudioManager : MonoBehaviour
     {
         foreach (AudioObject audio in audioObjects.Values)
         {
-            if (audio.source != null)
-            {
-                audio.source.Stop();
-            }
+            audio.Stop();
         }
     }
 }
