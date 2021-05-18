@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 
+[RequireComponent(typeof(RayFromCamera), typeof(PlayerMovement), typeof(Rewinder))]
 public class Carrier : MonoBehaviour
 {
     private InputManager input;
@@ -16,9 +18,11 @@ public class Carrier : MonoBehaviour
     private void Awake()
     {
         input = FindObjectOfType<InputManager>();
+        Assert.IsNotNull(input, "InputManager not found.");
+        playerTrigger = GetComponentInChildren<NonPlayerTrigger>();
+        Assert.IsNotNull(input, "NonPlayerTrigger not found.");
         ray = GetComponent<RayFromCamera>();
         player = GetComponent<PlayerMovement>();
-        playerTrigger = GetComponentInChildren<NonPlayerTrigger>();
         rewinder = GetComponent<Rewinder>();
     }
 

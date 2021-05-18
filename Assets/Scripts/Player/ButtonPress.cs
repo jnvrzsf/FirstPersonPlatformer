@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 
+[RequireComponent(typeof(RayFromCamera)]
 public class ButtonPress : MonoBehaviour
 {
     private InputManager input;
@@ -8,8 +10,9 @@ public class ButtonPress : MonoBehaviour
 
     void Awake()
     {
-        ray = GetComponent<RayFromCamera>();
         input = FindObjectOfType<InputManager>();
+        Assert.IsNotNull(input, "InputManager not found.");
+        ray = GetComponent<RayFromCamera>();
     }
 
     void Update()

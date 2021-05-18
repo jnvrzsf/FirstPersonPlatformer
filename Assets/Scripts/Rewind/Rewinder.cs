@@ -2,27 +2,37 @@
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using TMPro;
+using UnityEngine.Assertions;
 
+[RequireComponent(typeof(RayFromCamera), typeof(RewindablePlayer), typeof(Carrier))]
 public class Rewinder : MonoBehaviour
 {
-    private RayFromCamera ray;
     private InputManager input;
-    private Rewindable rewindedObject;
+    private TimeManager timeManager;
+
+    private RayFromCamera ray;
     private RewindablePlayer player;
     private Carrier carrier;
-    private TimeManager timeManager;
+
     private ChromaticAberration chromaticAberration;
+
     [SerializeField] private GameObject rewindCountdown;
     private TextMeshProUGUI rewindCountdownText;
+
+    private Rewindable rewindedObject;
     public bool isRewinding => rewindedObject != null;
 
     private void Awake()
     {
-        ray = GetComponent<RayFromCamera>();
         input = FindObjectOfType<InputManager>();
+        Assert.IsNotNull(input, "InputManager not found.");
+        timeManager = FindObjectOfType<TimeManager>();
+        Assert.IsNotNull(input, "TimeManager not found.");
+
+        ray = GetComponent<RayFromCamera>();
         player = GetComponent<RewindablePlayer>();
         carrier = GetComponent<Carrier>();
-        timeManager = FindObjectOfType<TimeManager>();
+
         VolumeProfile volumeProfile = Camera.main.GetComponent<Volume>().profile;
         volumeProfile.TryGet<ChromaticAberration>(out chromaticAberration);
         rewindCountdownText = rewindCountdown.GetComponentInChildren<TextMeshProUGUI>();

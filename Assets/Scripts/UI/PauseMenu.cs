@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
@@ -7,15 +8,19 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject popup;
     [SerializeField] private GameObject rewindPanel;
     [SerializeField] private CursorController cursor;
+
     private PlayerState player;
     private InputManager input;
+
     public bool isPaused { get; private set; }
     public bool isDisplaying => menu.activeSelf || rewindPanel.activeSelf;
 
     private void Awake()
     {
         input = FindObjectOfType<InputManager>();
+        Assert.IsNotNull(input, "InputManager not found.");
         player = FindObjectOfType<PlayerState>();
+        Assert.IsNotNull(player, "PlayerState not found.");
     }
 
     private void Update()

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(Renderer))]
 public abstract class Pickupable : MonoBehaviour
 {
     protected Rigidbody rb;

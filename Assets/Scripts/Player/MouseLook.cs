@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 
 public class MouseLook : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class MouseLook : MonoBehaviour
     private void Awake()
     {
         input = FindObjectOfType<InputManager>();
+        Assert.IsNotNull(input, "InputManager not found.");
         yRotation = transform.rotation.eulerAngles.y;
     }
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(MouseLook), typeof(PlayerMovement))]
 public class PlayerState : MonoBehaviour
 {
     private MouseLook cam;

@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class TimeManager : MonoBehaviour
 {
@@ -15,7 +16,9 @@ public class TimeManager : MonoBehaviour
     private void Awake()
     {
         menu = FindObjectOfType<PauseMenu>();
+        Assert.IsNotNull(menu, "PauseMenu not found.");
         player = FindObjectOfType<PlayerState>();
+        Assert.IsNotNull(player, "PlayerState not found.");
     }
 
     private void Update()

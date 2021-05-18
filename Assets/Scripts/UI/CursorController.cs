@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 
+[RequireComponent(typeof(PauseMenu))]
 public class CursorController : MonoBehaviour
 {
     private Carrier carrier;
@@ -13,7 +15,9 @@ public class CursorController : MonoBehaviour
     private void Awake()
     {
         carrier = FindObjectOfType<Carrier>();
+        Assert.IsNotNull(carrier, "Carrier not found.");
         rewinder = FindObjectOfType<Rewinder>();
+        Assert.IsNotNull(rewinder, "Rewinder not found.");
         menu = GetComponent<PauseMenu>();
         Lock();
     }

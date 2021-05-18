@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerState))]
 public class RewindablePlayer : RewindableRB
 {
     [SerializeField] private Transform cam;

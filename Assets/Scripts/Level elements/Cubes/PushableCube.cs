@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class PushableCube : MonoBehaviour
 {
     private Rigidbody rb;

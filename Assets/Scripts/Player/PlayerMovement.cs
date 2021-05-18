@@ -2,12 +2,13 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
+[RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] private Transform orientation;
+    private InputManager input;
     private Rigidbody rb;
     private Collider col;
-    private InputManager input;
-    [SerializeField] private Transform orientation;
 
     private Vector3 horizontalDirection;
     private Vector3 projectedDirection;
@@ -39,10 +40,10 @@ public class PlayerMovement : MonoBehaviour
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody>();
-        col = GetComponent<Collider>();
         input = FindObjectOfType<InputManager>();
         Assert.IsNotNull(input, "InputManager not found.");
+        rb = GetComponent<Rigidbody>();
+        col = GetComponent<Collider>();
     }
 
     private void Update()
