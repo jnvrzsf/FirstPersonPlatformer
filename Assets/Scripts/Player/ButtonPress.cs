@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
 
-[RequireComponent(typeof(RayFromCamera)]
+[RequireComponent(typeof(RayFromCamera))]
 public class ButtonPress : MonoBehaviour
 {
     private InputManager input;
