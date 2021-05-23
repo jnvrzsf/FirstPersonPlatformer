@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     private float x;
     private float y;
     private float z;
+    private Vector3 movement;
     [SerializeField]
     private LayerMask groundMask;
     private RaycastHit raycastHit;
@@ -68,74 +69,23 @@ public class PlayerMovement : MonoBehaviour
         {
             CheckGround();
 
-            if (isOnMovingObject)
-            {
-                transform.SetParent(movingObjectUnderPlayer);
-            }
-            else
-            {
-                transform.SetParent(null);
-            }
+            CheckMovingObject();
 
-            horizontalDirection = (orientation.forward * input.Vertical + orientation.right * input.Horizontal).normalized;
-            projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, raycastHit.normal).normalized;
+            CalculateDirection();
 
-            x = 0;
-            y = 0;
-            z = 0;
-            rb.useGravity = true;
+            CalculateMovement();
 
-            // we are on a slope and we settled on the ground
-            if (isOnSlope) 
-            {
-                if (!isSlopeTooSteep)
-                {
-                    // turn off gravity if there is no input
-                    if (input.Horizontal == 0 && input.Vertical == 0)
-                    {
-                        rb.useGravity = false;
-                    }
-                    // walk according to the direction projected on the slope
-                    else
-                    {
-                        x = projectedDirection.x * walkSpeed;
-                        y = projectedDirection.y * walkSpeed;
-                        z = projectedDirection.z * walkSpeed;
-                    }
-                }
-                else
-                {
-                    // don't turn off gravity, add a little, let it slide down
-                    x = projectedDirection.x * walkSpeed;
-                    y = -2f;
-                    z = projectedDirection.z * walkSpeed;
-                    jump = false;
-                }
-            }
-            // walking on normal ground / falling - applies gravity
-            else
-            {
-                x = projectedDirection.x * walkSpeed;
-                y = rb.velocity.y;
-                z = projectedDirection.z * walkSpeed;
-            }
-
-            if (jump && canJump)
-            {
-                y = jumpForce;
-                if (!isGrounded)
-                {
-                    AudioManager.instance.PlayOneShot(AudioType.Landing);
-                }
-                AudioManager.instance.Play(AudioType.Jump);
-            }
-            jump = false;
-
-            rb.velocity = new Vector3(x, y, z);
+            MovePlayer();
         }
     }
 
     private void CheckGround()
+    {
+        CastSphere();
+        CheckSlope();
+    }
+
+    private void CastSphere()
     {
         // check if we can jump, if we are standing on cubes or a moving object
         float radius = col.bounds.extents.x - 0.01f; // little smaller than the capsule's, so that we can't jump off walls
@@ -166,7 +116,7 @@ public class PlayerMovement : MonoBehaviour
                         pickupablesUnderPlayer.Add(hit.collider);
                     }
 
-                    if (hit.collider.CompareTag(Tags.Moving))
+                    if (!isOnMovingObject && hit.collider.CompareTag(Tags.Moving))
                     {
                         isOnMovingObject = true;
                         movingObjectUnderPlayer = hit.transform;
@@ -182,7 +132,10 @@ public class PlayerMovement : MonoBehaviour
         {
             canJump = false;
         }
+    }
 
+    private void CheckSlope()
+    {
         // check if we are on a slope and the slope angle
         if (canJump) // only if we are no farther than jump distance from the ground
         {
@@ -198,5 +151,97 @@ public class PlayerMovement : MonoBehaviour
                 isOnSlope = false;
             }
         }
+    }
+
+    private void CheckMovingObject()
+    {
+        if (isOnMovingObject)
+        {
+            if (transform.parent == null)
+            {
+                transform.SetParent(movingObjectUnderPlayer);
+            }
+        }
+        else
+        {
+            if (transform.parent != null)
+            {
+                transform.SetParent(null);
+            }
+        }
+    }
+
+
+    private void CalculateDirection()
+    {
+        horizontalDirection = (orientation.forward * input.Vertical + orientation.right * input.Horizontal).normalized;
+        projectedDirection = Vector3.ProjectOnPlane(horizontalDirection, raycastHit.normal).normalized;
+    }
+
+    private void CalculateMovement()
+    {
+        x = 0;
+        y = 0;
+        z = 0;
+        rb.useGravity = true;
+
+        // we are on a slope and we settled on the ground
+        if (isOnSlope)
+        {
+            if (!isSlopeTooSteep)
+            {
+                // turn off gravity if there is no input
+                if (input.IsIdle)
+                {
+                    rb.useGravity = false;
+                }
+                // walk according to the direction projected on the slope
+                else
+                {
+                    x = projectedDirection.x * walkSpeed;
+                    y = projectedDirection.y * walkSpeed;
+                    z = projectedDirection.z * walkSpeed;
+                }
+            }
+            else
+            {
+                // don't turn off gravity, add a little, let it slide down
+                x = projectedDirection.x * walkSpeed;
+                y = -2f;
+                z = projectedDirection.z * walkSpeed;
+                jump = false;
+            }
+        }
+        // walking on normal ground / falling - applies gravity
+        else
+        {
+            x = projectedDirection.x * walkSpeed;
+            y = rb.velocity.y;
+            z = projectedDirection.z * walkSpeed;
+        }
+
+        CheckJump();
+
+        movement = new Vector3(x, y, z);
+    }
+
+
+    private void CheckJump()
+    {
+        if (jump && canJump)
+        {
+            y = jumpForce;
+            if (!isGrounded)
+            {
+                AudioManager.instance.PlayOneShot(AudioType.Landing);
+            }
+            AudioManager.instance.Play(AudioType.Jump);
+        }
+        jump = false;
+    }
+
+    private void MovePlayer()
+    {
+        rb.velocity = movement;
     }
 }
