@@ -72,7 +72,7 @@ public abstract class Pickupable : MonoBehaviour
     {
         SetToUntouchable();
         rb.useGravity = false;
-        Destroy(col);
+        col.enabled = false;
         AudioManager.instance.PlayOnGameObject(AudioType.CubeDissolve, gameObject);
         rend.material = dissolveMat;
         StartCoroutine(Dissolve());
@@ -81,11 +81,11 @@ public abstract class Pickupable : MonoBehaviour
     private IEnumerator Dissolve()
     {
         float seconds = AudioManager.instance.GetAudioLength(AudioType.CubeDissolve);
-        float percentage = 0f;
-        while (percentage < 1f)
+        float dissolvePercentage = 0f;
+        while (dissolvePercentage < 1f)
         {
-            percentage += Time.deltaTime / seconds;
-            rend.material.SetFloat(Constants.DissolvePercentage, percentage);
+            dissolvePercentage += Time.deltaTime / seconds;
+            rend.material.SetFloat(Constants.DissolvePercentage, dissolvePercentage);
             yield return null;
         }
         Destroy(gameObject);

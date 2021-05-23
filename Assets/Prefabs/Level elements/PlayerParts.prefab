@@ -182,7 +182,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 3507689825165289285}
-  orientation: {fileID: 3507689824318255921}
 --- !u!1 &3507689824318255920
 GameObject:
   m_ObjectHideFlags: 0
@@ -258,7 +257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69149a2ca2e437d4ba03c99a752c00b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followTarget: {fileID: 3507689826184123579}
+  target: {fileID: 3507689826184123579}
 --- !u!1 &3507689825430693371
 GameObject:
   m_ObjectHideFlags: 0
@@ -542,4 +541,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a05be288aa3dc8e418a9d59ff87ac63d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPickupableOverlapping: 0

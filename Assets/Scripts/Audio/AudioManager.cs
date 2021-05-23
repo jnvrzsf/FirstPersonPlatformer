@@ -201,7 +201,6 @@ public class AudioManager : MonoBehaviour
     private void SubScribeToTimeChanges()
     {
         timeManager = FindObjectOfType<TimeManager>();
-        Assert.IsNotNull(timeManager, "TimeManager not found.");
         if (timeManager)
         {
             timeManager.TimePaused += PauseInGameSounds;

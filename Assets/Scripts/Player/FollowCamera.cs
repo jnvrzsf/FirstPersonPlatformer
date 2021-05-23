@@ -2,10 +2,10 @@
 
 public class FollowCamera : MonoBehaviour
 {
-    [SerializeField] private Transform followTarget;
+    [SerializeField] private Transform target;
 
     private void Update()
     {
-        transform.position = followTarget.position;
+        transform.position = target.position;
     }
 }

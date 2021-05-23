@@ -7,7 +7,7 @@ public class Carrier : MonoBehaviour
     private InputManager input;
     private RayFromCamera ray;
     private PlayerMovement player;
-    private NonPlayerTrigger playerTrigger;
+    private NonPlayerTrigger nonPlayerTrigger;
     private Rewinder rewinder;
     public Transform carryPoint;
     private Pickupable pickupObject;
@@ -19,7 +19,7 @@ public class Carrier : MonoBehaviour
     {
         input = FindObjectOfType<InputManager>();
         Assert.IsNotNull(input, "InputManager not found.");
-        playerTrigger = GetComponentInChildren<NonPlayerTrigger>();
+        nonPlayerTrigger = GetComponentInChildren<NonPlayerTrigger>();
         Assert.IsNotNull(input, "NonPlayerTrigger not found.");
         ray = GetComponent<RayFromCamera>();
         player = GetComponent<PlayerMovement>();
@@ -27,7 +27,7 @@ public class Carrier : MonoBehaviour
     }
 
     private bool carriedObjectIsTooFar => distance > maxDistance;
-    private bool canBeDropped => !playerTrigger.isPickupableOverlapping;
+    private bool canBeDropped => !nonPlayerTrigger.isPickupableOverlapping;
 
     private void Update()
     {
@@ -52,7 +52,7 @@ public class Carrier : MonoBehaviour
                         {
                             foreach (Collider col in player.pickupablesUnderPlayer)
                             {
-                                if (GameObject.ReferenceEquals(ray.hitInfo.collider, col))
+                                if (ReferenceEquals(ray.hitInfo.collider, col))
                                 {
                                     return;
                                 }
