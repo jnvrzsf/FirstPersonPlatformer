@@ -182,6 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 3507689825165289285}
+  mouse: {fileID: 9002088580469487711}
 --- !u!1 &3507689824318255920
 GameObject:
   m_ObjectHideFlags: 0

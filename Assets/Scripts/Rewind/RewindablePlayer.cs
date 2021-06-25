@@ -25,8 +25,8 @@ public class RewindablePlayer : RewindableRB
     public override void StopRewinding()
     {
         base.StopRewinding();
-        playerState.isRewinding = false;
         mouse.UpdateRotation();
+        playerState.isRewinding = false;
     }
 
     protected override void Record()
