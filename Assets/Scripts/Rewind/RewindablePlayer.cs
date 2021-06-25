@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerState))]
+[RequireComponent(typeof(PlayerState), typeof(MouseLook))]
 public class RewindablePlayer : RewindableRB
 {
     [SerializeField] private Transform cam;
+    [SerializeField] private MouseLook mouse;
     private LinkedList<Quaternion> cameraRecords;
     private PlayerState playerState;
 
@@ -25,6 +26,7 @@ public class RewindablePlayer : RewindableRB
     {
         base.StopRewinding();
         playerState.isRewinding = false;
+        mouse.UpdateRotation();
     }
 
     protected override void Record()

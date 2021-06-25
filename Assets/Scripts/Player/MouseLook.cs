@@ -35,4 +35,14 @@ public class MouseLook : MonoBehaviour
 
     public void Freeze() => isFrozen = true;
     public void Unfreeze() => isFrozen = false;
+
+    /// <summary>
+    /// Updates the stored rotational values when we finish rewinding,
+    /// because the camera's rotation might have been altered during rewind.
+    /// </summary>
+    public void UpdateRotation()
+    {
+        xRotation = cam.rotation.eulerAngles.x;
+        yRotation = cam.rotation.eulerAngles.y;
+    }
 }
